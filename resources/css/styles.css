@@ -1,0 +1,104 @@
+body {
+    background-color: unset;
+}
+
+.header {
+    text-align: center;
+    background: white;
+    height: 350px;
+    background-size: cover;
+    background-position: left center;
+    background-repeat: no-repeat;
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.24) 0%, rgba(255, 255, 255, 0.267) 100%), url(IMG_20200624_115103_2.jpg);
+}
+
+.header h1 {
+    font-size: 50px;
+    text-shadow: 2px 2px 4px #000000;
+}
+
+#comment {
+    font-size: 20px;
+    text-shadow: 2px 2px 4px #000000;
+}
+
+#bodyheader {
+    color: white;
+    font-family: "Montserrat", sans-serif;
+}
+
+.leftnav {
+    overflow: hidden;
+    background-color: #333;
+    font-size: 14pt;
+    float: left;
+    width: 10%;
+}
+
+.leftnav a {
+    float: left;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+.leftnav a:hover {
+    background-color: #ddd;
+    color: black;
+    font-size: 16pt;
+}
+
+
+.topnav {
+    overflow: hidden;
+    background-color: #333;
+    font-size: 14pt;
+    float: left;
+    width: 100%;
+}
+
+.topnav a {
+    float: left;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+.topnav a:hover {
+    background-color: #ddd;
+    color: black;
+    font-size: 16pt;
+}
+
+.dashboard {
+    overflow: hidden;
+    width: 90%;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th,
+td {
+    text-align: left;
+    padding: 8px;
+}
+
+tbody>tr:nth-child(even) {
+    background-color: #f2f2f2 !important
+}
+
+tbody>tr:nth-child(odd) {
+    background-color: #fff !important
+}
+
+th {
+    background-color: #2f3439;
+    color: white;
+}
