@@ -5,6 +5,18 @@ function buildCharts(sample) {
 
     var data = enrollData;
     // console.log(data);
+    var year = data.map(year => year['year']);
+    var enrollmentChange = data.map(enrollment => enrollment['TYPE OF ENROLLMENT CHANGE']);
+    var planType = data.map(type => type['PLAN TYPE']);
+    var planName = data.map(pname => pname['PLAN NAME']);
+    var name = data.map(ename => ename['NAME']);
+    console.log(year);
+    console.log(enrollmentChange);
+    console.log(planType);
+    console.log(planName);
+    console.log(name);
+
+    buildTable(year, enrollmentChange, planType, planName, name);
 
     var kept = data.filter(coverage => coverage['TYPE OF ENROLLMENT CHANGE'] == 'Kept Coverage');
     var added = data.filter(coverage => coverage['TYPE OF ENROLLMENT CHANGE'] == 'Added Coverage');
@@ -75,6 +87,20 @@ function buildCharts(sample) {
     var config = { responsive: true }
 
     Plotly.newPlot('enrollment', data, layout, config);
+
+    function buildTable(year, enrollmentChange, planType, planName, name) {
+      var table = d3.select("#summary-table");
+      var tbody = table.select("tbody");
+      var trow;
+      for (var i = 0; i < 12; i++) {
+        trow = tbody.append("tr");
+        trow.append("td").text(year[i]);
+        trow.append("td").text(enrollmentChange[i]);
+        trow.append("td").text(planType[i]);
+        trow.append("td").text(planName[i]);
+        trow.append("td").text(name[i]);
+      }
+    }
 
   });
 
