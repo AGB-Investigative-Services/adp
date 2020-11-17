@@ -1,4 +1,4 @@
-function init() {
+function buildCharts(sample) {
 
   d3.json("resources/data/enrollment_comparsion_data.json").then((enrollData) => {
     // console.log(enrollData);
@@ -77,6 +77,12 @@ function init() {
     Plotly.newPlot('enrollment', data, layout, config);
 
   });
+
+}
+
+function init() {
+
+  buildCharts();
 
 }
 
