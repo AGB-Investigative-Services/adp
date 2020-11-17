@@ -1,59 +1,82 @@
 function init() {
 
-    d3.json("resources/data/enrollment_comparsion_data.json").then((enrollData) => {
-      var data = enrollData;
-      console.log(data);
+  d3.json("resources/data/enrollment_comparsion_data.json").then((enrollData) => {
+    // console.log(enrollData);
 
-      var keptCoverage = data.filter(cov => cov['TYPE OF ENROLLMENT CHANGE'] = 'Kept Coverage');
-      var addedCoverage = data.filter(cov => cov['TYPE OF ENROLLMENT CHANGE'] = 'Added Coverage');
+    var data = enrollData;
+    // console.log(data);
 
-      var trace1 = {
-        type: 'bar',
-        x: keptCoverage.map(row => row['PLAN TYPE']),
-        y: keptCoverage.map(row => row['# of Employees']),
-        text: keptCoverage.map(row => row['# of Employees']),
-        marker: {
-          color: 'rgb(157,157,157)'
-        },
-        name: 'Kept Coverage',
-      };
+    var kept = data.filter(coverage => coverage['TYPE OF ENROLLMENT CHANGE'] == 'Kept Coverage');
+    var added = data.filter(coverage => coverage['TYPE OF ENROLLMENT CHANGE'] == 'Added Coverage');
+    console.log(kept);
+    console.log(added);
 
-      var trace2 = {
-        type: 'bar',
-        x: addedCoverage.map(row => row['PLAN TYPE']),
-        y: addedCoverage.map(row => row['# of Employees']),
-        text: addedCoverage.map(row => row['# of Employees']),
-        marker: {
-          color: 'rgb(157,157,157)'
-        },
-        name: 'Added Coverage',
-      };
 
-      var data = [trace1, trace2];
+    // (https://stackoverflow.com/questions/29364262/how-to-group-by-and-sum-array-of-object)
+    var sumKept = [];
+    kept.reduce(function (kpt, value) {
+      if (!kpt[value['PLAN TYPE']]) {
+        kpt[value['PLAN TYPE']] = { 'PLAN TYPE': value['PLAN TYPE'], '# of Employees': 0 };
+        sumKept.push(kpt[value['PLAN TYPE']])
+      }
+      kpt[value['PLAN TYPE']]['# of Employees'] += value['# of Employees'];
+      return kpt;
+    }, {});
 
-      var layout = {
-        title: 'Portofino\'s Monthly Online Sales',
-        barmode: 'group',
-        font: {
-          family: 'Bahnschrift',
-          size: 24,
-          color: 'white'
-        },
-        height: 450,
-        margin: {
-          t: 75
-        },
-        paper_bgcolor: 'rgb(191, 205, 223)',
-        plot_bgcolor: 'rgb(230, 235, 242)',
-        xaxis: { title: 'Monthly' },
-        yaxis: { title: 'Net Totals' },
-      };
-  
-      var config = { responsive: true }
-  
-      Plotly.newPlot('monthly', data, layout, config);
+    var sumAdded = [];
+    added.reduce(function (add, value) {
+      if (!add[value['PLAN TYPE']]) {
+        add[value['PLAN TYPE']] = { 'PLAN TYPE': value['PLAN TYPE'], '# of Employees': 0 };
+        sumAdded.push(add[value['PLAN TYPE']])
+      }
+      add[value['PLAN TYPE']]['# of Employees'] += value['# of Employees'];
+      return add;
+    }, {});
 
+    console.log(sumKept);
+    console.log(sumAdded);
+
+
+    var sortedKept = sumKept.sort(function (a, b) {
+      return b['# of Employees'] - a['# of Employees']
     });
+
+    console.log(sortedKept);
+
+
+    var trace1 = {
+      type: 'bar',
+      x: sumKept.map(row => row['PLAN TYPE']),
+      y: sumKept.map(row => row['# of Employees']),
+      text: "Kept Coverage",
+      text: sumKept.map(row => row['# of Employees']),
+      textposition: 'auto',
+      name: 'Kept Coverage',
+    };
+
+    var trace2 = {
+      type: 'bar',
+      x: sumAdded.map(row => row['PLAN TYPE']),
+      y: sumAdded.map(row => row['# of Employees']),
+      text: sumAdded.map(row => row['# of Employees']),
+      textposition: 'auto',
+      name: 'Added Coverage',
+    };
+
+    var data = [trace1, trace2];
+
+    var layout = {
+      title: 'Employee Benefit Enrollment',
+      barmode: 'group',
+      xaxis: { title: 'Plan Name' },
+      yaxis: { title: '# of Employees' },
+    };
+
+    var config = { responsive: true }
+
+    Plotly.newPlot('enrollment', data, layout, config);
+
+  });
 
 }
 
