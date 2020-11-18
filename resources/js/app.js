@@ -3,14 +3,14 @@ function buildCharts(sample) {
   d3.json("resources/data/enrollment_comparsion_data.json").then((enrollData) => {
     // console.log(enrollData);
 
-    var data = enrollData;
+    var data = enrollData.filter(sampleObj => sampleObj['PLAN NAME'] == sample);
     // console.log(data);
 
     var kept = data.filter(coverage => coverage['TYPE OF ENROLLMENT CHANGE'] == 'Kept Coverage'); // Used for Bar Charts
     var added = data.filter(coverage => coverage['TYPE OF ENROLLMENT CHANGE'] == 'Added Coverage'); // Used for Bar Charts
     // console.log(kept);
     // console.log(added);
-    
+
     var year = data.map(year => year['year']);
     var enrollmentChange = data.map(enrollment => enrollment['TYPE OF ENROLLMENT CHANGE']);
     var planType = data.map(type => type['PLAN TYPE']);
@@ -60,8 +60,8 @@ function buildCharts(sample) {
       x: sumKept.map(row => row['PLAN TYPE']),
       y: sumKept.map(row => row['# of Employees']),
       text: "Kept Coverage",
-      // text: sumkept.map(row => row['# of Employees']),
-      // textposition: 'auto',
+      text: sumKept.map(row => row['# of Employees']),
+      textposition: 'auto',
       name: 'Kept Coverage',
     };
 
@@ -69,8 +69,8 @@ function buildCharts(sample) {
       type: 'bar',
       x: sumAdded.map(row => row['PLAN TYPE']),
       y: sumAdded.map(row => row['# of Employees']),
-      // text: sumAdded.map(row => row['# of Employees']),
-      // textposition: 'auto',
+      text: sumAdded.map(row => row['# of Employees']),
+      textposition: 'auto',
       name: 'Added Coverage',
     };
 
@@ -87,12 +87,12 @@ function buildCharts(sample) {
 
     Plotly.newPlot('enrollment', data, layout, config);
 
-    
+
     function buildTable(year, enrollmentChange, planType, planName, name) {
       var table = d3.select("#summary-table");
       var tbody = table.select("tbody");
       var trow;
-      for (var i = 0; i < 100; i++) {
+      for (var i = 0; i < 10; i++) {
         trow = tbody.append("tr");
         trow.append("td").text(year[i]);
         trow.append("td").text(enrollmentChange[i]);
@@ -108,7 +108,33 @@ function buildCharts(sample) {
 
 function init() {
 
-  buildCharts();
+  // Grab a reference to the dropdown select element
+  var selector = d3.select("#selDataset");
+
+  d3.json("resources/data/enrollment_comparsion_data.json").then((enrollData) => {
+
+    var data = enrollData.map(yr => yr['PLAN NAME']);
+    console.log(data);
+
+    data.forEach((sample) => {
+      selector
+        .append("option")
+        .text(sample)
+        .property("value", sample);
+    });
+
+    // Use the first sample from the list to build the initial plots
+    var firstSample = data[0];
+    console.log(firstSample);
+    buildCharts(firstSample);
+
+  });
+
+}
+
+function optionChanged(newSample) {
+  // Fetch new data each time a new sample is selected
+  buildCharts(newSample);
 
 }
 
