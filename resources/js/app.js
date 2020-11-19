@@ -102,6 +102,9 @@ function enrollmentTable(sample) {
     function buildTable(year, enrollmentChange, planType, planName, name) {
       var table = d3.select("#summary-table");
       var tbody = table.select("tbody");
+
+      tbody.html("");
+
       var trow;
       for (var i = 0; i < 10; i++) {
         trow = tbody.append("tr");
@@ -111,6 +114,7 @@ function enrollmentTable(sample) {
         trow.append("td").text(planName[i]);
         trow.append("td").text(name[i]);
       }
+
     }
 
   });
@@ -145,9 +149,10 @@ function init() {
 }
 
 function optionChanged(newSample) {
+
   // Fetch new data each time a new sample is selected
   enrollmentBarCharts(newSample);
-  enrollmentTable(newSample)
+  enrollmentTable(newSample);
 
 }
 
