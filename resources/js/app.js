@@ -85,6 +85,7 @@ function enrollmentTable(sample) {
     // console.log(enrollData);
 
     var data = enrollData.filter(sampleObj => sampleObj['PLAN NAME'] == sample);
+    // var data = enrollData.filter(sampleObj => sampleObj['TYPE OF ENROLLMENT CHANGE'] == sample);
     // console.log(data);
 
     var year = data.map(year => year['year']);
@@ -106,7 +107,7 @@ function enrollmentTable(sample) {
       tbody.html("");
 
       var trow;
-      for (var i = 0; i < 10; i++) {
+      for (var i = 0; i < 50; i++) {
         trow = tbody.append("tr");
         trow.append("td").text(year[i]);
         trow.append("td").text(enrollmentChange[i]);
@@ -124,6 +125,31 @@ function enrollmentTable(sample) {
 function init() {
 
   // Grab a reference to the dropdown select element
+  var selCoverage = d3.select("#selCoverage");
+
+  d3.json("resources/data/enrollment_comparsion_data.json").then((enrollData) => {
+
+    var data = enrollData.map(enrollmentType => enrollmentType['TYPE OF ENROLLMENT CHANGE']);
+    console.log(data);
+
+    // finding unique values
+    function onlyUnique(value, index, self) {
+      return self.indexOf(value) === index;
+    }
+
+    var unique = data.filter(onlyUnique);
+    console.log(unique);
+
+    unique.forEach((sample) => {
+      selCoverage
+        .append("option")
+        .text(sample)
+        .property("value", sample);
+    });
+
+  });
+
+  // Grab a reference to the dropdown select element
   var selector = d3.select("#selDataset");
 
   d3.json("resources/data/enrollment_comparsion_data.json").then((enrollData) => {
@@ -131,7 +157,15 @@ function init() {
     var data = enrollData.map(pname => pname['PLAN NAME']);
     // console.log(data);
 
-    data.forEach((sample) => {
+    // finding unique values
+    function onlyUnique(value, index, self) {
+      return self.indexOf(value) === index;
+    }
+
+    var unique = data.filter(onlyUnique);
+    // console.log(unique);
+
+    unique.forEach((sample) => {
       selector
         .append("option")
         .text(sample)
@@ -139,7 +173,7 @@ function init() {
     });
 
     // Use the first sample from the list to build the initial plots
-    var firstSample = data[0];
+    var firstSample = unique[0];
     // console.log(firstSample);
     enrollmentBarCharts(firstSample);
     enrollmentTable(firstSample);
@@ -155,6 +189,7 @@ function optionChanged(newSample) {
   enrollmentTable(newSample);
 
 }
+
 
 // Initialize the dashboard
 init();
