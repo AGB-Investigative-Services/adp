@@ -1,27 +1,15 @@
-function buildCharts(sample) {
+function enrollmentBarCharts(sample) {
 
   d3.json("resources/data/enrollment_comparsion_data.json").then((enrollData) => {
     // console.log(enrollData);
 
-    var data = enrollData.filter(sampleObj => sampleObj['PLAN NAME'] == sample);
+    var data = enrollData;
     // console.log(data);
 
     var kept = data.filter(coverage => coverage['TYPE OF ENROLLMENT CHANGE'] == 'Kept Coverage'); // Used for Bar Charts
     var added = data.filter(coverage => coverage['TYPE OF ENROLLMENT CHANGE'] == 'Added Coverage'); // Used for Bar Charts
     // console.log(kept);
     // console.log(added);
-
-    var year = data.map(year => year['year']);
-    var enrollmentChange = data.map(enrollment => enrollment['TYPE OF ENROLLMENT CHANGE']);
-    var planType = data.map(type => type['PLAN TYPE']);
-    var planName = data.map(pname => pname['PLAN NAME']);
-    var name = data.map(ename => ename['NAME']);
-    // console.log(year);
-    // console.log(enrollmentChange);
-    // console.log(planType);
-    // console.log(planName);
-    // console.log(name);
-    buildTable(year, enrollmentChange, planType, planName, name);
 
     // (https://stackoverflow.com/questions/29364262/how-to-group-by-and-sum-array-of-object)
     var sumKept = [];
@@ -45,14 +33,14 @@ function buildCharts(sample) {
       return add;
     }, {});
 
-    console.log(sumKept);
-    console.log(sumAdded);
+    // console.log(sumKept);
+    // console.log(sumAdded);
 
     var sortedKept = sumKept.sort(function (a, b) {
       return b['# of Employees'] - a['# of Employees']
     });
 
-    console.log(sortedKept);
+    // console.log(sortedKept);
 
 
     var trace1 = {
@@ -87,6 +75,29 @@ function buildCharts(sample) {
 
     Plotly.newPlot('enrollment', data, layout, config);
 
+  });
+
+}
+
+function enrollmentTable(sample) {
+
+  d3.json("resources/data/enrollment_comparsion_data.json").then((enrollData) => {
+    // console.log(enrollData);
+
+    var data = enrollData.filter(sampleObj => sampleObj['PLAN NAME'] == sample);
+    // console.log(data);
+
+    var year = data.map(year => year['year']);
+    var enrollmentChange = data.map(enrollment => enrollment['TYPE OF ENROLLMENT CHANGE']);
+    var planType = data.map(type => type['PLAN TYPE']);
+    var planName = data.map(pname => pname['PLAN NAME']);
+    var name = data.map(ename => ename['NAME']);
+    // console.log(year);
+    // console.log(enrollmentChange);
+    // console.log(planType);
+    // console.log(planName);
+    // console.log(name);
+    buildTable(year, enrollmentChange, planType, planName, name);
 
     function buildTable(year, enrollmentChange, planType, planName, name) {
       var table = d3.select("#summary-table");
@@ -113,8 +124,8 @@ function init() {
 
   d3.json("resources/data/enrollment_comparsion_data.json").then((enrollData) => {
 
-    var data = enrollData.map(yr => yr['PLAN NAME']);
-    console.log(data);
+    var data = enrollData.map(pname => pname['PLAN NAME']);
+    // console.log(data);
 
     data.forEach((sample) => {
       selector
@@ -125,8 +136,9 @@ function init() {
 
     // Use the first sample from the list to build the initial plots
     var firstSample = data[0];
-    console.log(firstSample);
-    buildCharts(firstSample);
+    // console.log(firstSample);
+    enrollmentBarCharts(firstSample);
+    enrollmentTable(firstSample);
 
   });
 
@@ -134,7 +146,8 @@ function init() {
 
 function optionChanged(newSample) {
   // Fetch new data each time a new sample is selected
-  buildCharts(newSample);
+  enrollmentBarCharts(newSample);
+  enrollmentTable(newSample)
 
 }
 
