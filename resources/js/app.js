@@ -130,26 +130,27 @@ function keptCount(sample) {
     // console.log(data);
 
     var kept = data.filter(coverage => coverage['TYPE OF ENROLLMENT CHANGE'] == 'Kept Coverage'); 
-    console.log(kept);
+    // console.log(kept);
     var year2021 = kept.filter(year => year.year == "2021");
     var year2020 = kept.filter(year => year.year == "2020");
-    console.log(year2020);
+    // console.log(year2020);
+
 
     // Total Net Sum Number Chart
-
     var ktotal21 = 0
     var ktotal20 = 0
 
     for (i = 0; i < year2021.length; i++) {
       ktotal21 += year2021[i]['# of Employees'];
     }
-    console.log(ktotal21);
+    // console.log(ktotal21);
 
     for (i = 0; i < year2020.length; i++) {
       ktotal20 += year2020[i]['# of Employees'];
     }
-    console.log(ktotal20);
+    // console.log(ktotal20);
 
+    // (https://plotly.com/python/indicator/)
     var data = [
       {
         type: "indicator",
@@ -180,6 +181,81 @@ function keptCount(sample) {
 
     Plotly.newPlot('keptCount', data, layout, config);
 
+  });
+}
+
+function turnOver(sample) {
+
+  d3.json("resources/data/custom_hire_data.json").then((dashData) => {
+    // console.log(dashData);
+
+    var data = dashData;//.filter(sampleObj => sampleObj['PLAN NAME'] == sample);
+    console.log(data);
+
+    
+    var term = data.map(term => term['Termination Date']);
+    console.log(term);
+
+    function filter_array_values(arr) {
+      arr = arr.filter(isEligible);
+      return arr;
+    }
+    
+    function isEligible(value) {
+      if(value !== false || value !== null || value !== 0 || value !== "") {
+        return value;
+      }
+    }
+    // console.log(filter_array_values(term));
+
+    var termFiltered = filter_array_values(term);
+    console.log(termFiltered);
+
+
+    // Total Net Sum Number Chart
+    var hireTotal = 0
+    var termTotal = termFiltered.length;
+  //  console.log(termTotal);
+
+    for (i = 0; i < data.length; i++) {
+      hireTotal += data[i]['count'];
+    }
+    // console.log(hireTotal);
+
+    var total = termTotal / hireTotal;
+    console.log(total);
+ 
+
+    // (https://plotly.com/python/indicator/)
+    var data = [
+      {
+        type: "indicator",
+        mode: "number",
+        value: total,
+        domain: { row: 1, column: 0 }
+      }
+    ];
+
+    var layout = {
+      height: 150,
+      margin: { t: 50, b: 10, l: 10, r: 10 },
+      grid: { rows: 0, columns: 0, pattern: "independent" },
+      template: {
+        data: {
+          indicator: [
+            {
+              title: { text: "2021 Kept Coverages Total" },
+              mode: "number+delta",
+              // delta: { reference: termTotal }
+            }
+          ]
+        }
+      }
+    };
+
+    var config = { responsive: true }
+
+    Plotly.newPlot('turnOver', data, layout, config);
 
   });
 }
@@ -215,6 +291,7 @@ function init() {
     enrollmentBarCharts(firstSample);
     enrollmentTable(firstSample);
     keptCount(firstSample);
+    turnOver(firstSample);
 
   });
 
@@ -226,9 +303,9 @@ function optionChanged(newSample) {
   enrollmentBarCharts(newSample);
   enrollmentTable(newSample);
   keptCount(newSample);
-
+  turnOver(newSample);
+  
 }
-
 
 // Initialize the dashboard
 init();
