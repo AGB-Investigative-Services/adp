@@ -85,7 +85,6 @@ function enrollmentTable(sample) {
     // console.log(enrollData);
 
     var data = enrollData.filter(sampleObj => sampleObj['PLAN NAME'] == sample);
-    // var data = enrollData.filter(sampleObj => sampleObj['TYPE OF ENROLLMENT CHANGE'] == sample);
     // console.log(data);
 
     var year = data.map(year => year['year']);
@@ -122,32 +121,70 @@ function enrollmentTable(sample) {
 
 }
 
-function init() {
-
-  // Grab a reference to the dropdown select element
-  var selCoverage = d3.select("#selCoverage");
+function keptCount(sample) {
 
   d3.json("resources/data/enrollment_comparsion_data.json").then((enrollData) => {
+    // console.log(enrollData);
 
-    var data = enrollData.map(enrollmentType => enrollmentType['TYPE OF ENROLLMENT CHANGE']);
-    console.log(data);
+    var data = enrollData;//.filter(sampleObj => sampleObj['PLAN NAME'] == sample);
+    // console.log(data);
 
-    // finding unique values
-    function onlyUnique(value, index, self) {
-      return self.indexOf(value) === index;
+    var kept = data.filter(coverage => coverage['TYPE OF ENROLLMENT CHANGE'] == 'Kept Coverage'); 
+    console.log(kept);
+    var year2021 = kept.filter(year => year.year == "2021");
+    var year2020 = kept.filter(year => year.year == "2020");
+    console.log(year2020);
+
+    // Total Net Sum Number Chart
+
+    var ktotal21 = 0
+    var ktotal20 = 0
+
+    for (i = 0; i < year2021.length; i++) {
+      ktotal21 += year2021[i]['# of Employees'];
     }
+    console.log(ktotal21);
 
-    var unique = data.filter(onlyUnique);
-    console.log(unique);
+    for (i = 0; i < year2020.length; i++) {
+      ktotal20 += year2020[i]['# of Employees'];
+    }
+    console.log(ktotal20);
 
-    unique.forEach((sample) => {
-      selCoverage
-        .append("option")
-        .text(sample)
-        .property("value", sample);
-    });
+    var data = [
+      {
+        type: "indicator",
+        mode: "number+delta",
+        value: ktotal21,
+        domain: { row: 1, column: 0 }
+      }
+    ];
+
+    var layout = {
+      height: 150,
+      margin: { t: 50, b: 10, l: 10, r: 10 },
+      grid: { rows: 0, columns: 0, pattern: "independent" },
+      template: {
+        data: {
+          indicator: [
+            {
+              title: { text: "2021 Kept Coverages Total" },
+              mode: "number+delta",
+              delta: { reference: ktotal20 }
+            }
+          ]
+        }
+      }
+    };
+
+    var config = { responsive: true }
+
+    Plotly.newPlot('keptCount', data, layout, config);
+
 
   });
+}
+
+function init() {
 
   // Grab a reference to the dropdown select element
   var selector = d3.select("#selDataset");
@@ -177,6 +214,7 @@ function init() {
     // console.log(firstSample);
     enrollmentBarCharts(firstSample);
     enrollmentTable(firstSample);
+    keptCount(firstSample);
 
   });
 
@@ -187,6 +225,7 @@ function optionChanged(newSample) {
   // Fetch new data each time a new sample is selected
   enrollmentBarCharts(newSample);
   enrollmentTable(newSample);
+  keptCount(newSample);
 
 }
 
