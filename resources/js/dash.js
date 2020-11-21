@@ -250,7 +250,6 @@ function yearlyTurnover(sample) {
         data: {
           indicator: [
             {
-
               title: { text: sample},
               // mode: "number+delta",
               // delta: { reference: hireTotal, relative: true}
@@ -340,7 +339,7 @@ function yearlyRetention(sample) {
   d3.json("resources/data/custom_hire_data.json").then((dashData) => {
     // console.log(dashData);
 
-    var data = dashData;//.filter(sampleObj => sampleObj['PLAN NAME'] == sample);
+    var data = dashData.filter(sampleObj => sampleObj['Hire Year'] == sample);
     // console.log(data);
 
     // (https://stackoverflow.com/questions/15125920/how-to-get-distinct-values-from-an-array-of-objects-in-javascript)
@@ -386,8 +385,8 @@ function yearlyRetention(sample) {
         data: {
           indicator: [
             {
-              // title: { text: "Overall Retention Rate" },
-              mode: "number",
+              title: { text: sample},
+              // mode: "number",
               // delta: { reference: termTotal }
             }
           ]
@@ -434,7 +433,7 @@ function init() {
     turnover(firstSample);
     yearlyTurnover(firstSample);
     retention(firstSample);
-    yearlyRetention(firstsample);
+    yearlyRetention(firstSample);
 
   });
 
