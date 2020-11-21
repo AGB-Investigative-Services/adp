@@ -121,80 +121,16 @@ function enrollmentTable(sample) {
 
 }
 
-function keptCount(sample) {
-
-  d3.json("resources/data/enrollment_comparsion_data.json").then((enrollData) => {
-    // console.log(enrollData);
-
-    var data = enrollData;//.filter(sampleObj => sampleObj['PLAN NAME'] == sample);
-    // console.log(data);
-
-    var kept = data.filter(coverage => coverage['TYPE OF ENROLLMENT CHANGE'] == 'Kept Coverage'); 
-    // console.log(kept);
-    var year2021 = kept.filter(year => year.year == "2021");
-    var year2020 = kept.filter(year => year.year == "2020");
-    // console.log(year2020);
-
-
-    // Total Net Sum Number Chart
-    var ktotal21 = 0
-    var ktotal20 = 0
-
-    for (i = 0; i < year2021.length; i++) {
-      ktotal21 += year2021[i]['# of Employees'];
-    }
-    // console.log(ktotal21);
-
-    for (i = 0; i < year2020.length; i++) {
-      ktotal20 += year2020[i]['# of Employees'];
-    }
-    // console.log(ktotal20);
-
-    // (https://plotly.com/python/indicator/)
-    var data = [
-      {
-        type: "indicator",
-        mode: "number+delta",
-        value: ktotal21,
-        domain: { row: 1, column: 0 }
-      }
-    ];
-
-    var layout = {
-      height: 150,
-      margin: { t: 50, b: 10, l: 10, r: 10 },
-      grid: { rows: 0, columns: 0, pattern: "independent" },
-      template: {
-        data: {
-          indicator: [
-            {
-              title: { text: "2021 Kept Coverages Total" },
-              mode: "number+delta",
-              delta: { reference: ktotal20 }
-            }
-          ]
-        }
-      }
-    };
-
-    var config = { responsive: true }
-
-    Plotly.newPlot('keptCount', data, layout, config);
-
-  });
-}
-
-function turnOver(sample) {
+function turnover(sample) {
 
   d3.json("resources/data/custom_hire_data.json").then((dashData) => {
     // console.log(dashData);
 
     var data = dashData;//.filter(sampleObj => sampleObj['PLAN NAME'] == sample);
-    console.log(data);
+    // console.log(data);
 
-    
     var term = data.map(term => term['Termination Date']);
-    console.log(term);
+    // console.log(term);
 
     function filter_array_values(arr) {
       arr = arr.filter(isEligible);
@@ -209,22 +145,20 @@ function turnOver(sample) {
     // console.log(filter_array_values(term));
 
     var termFiltered = filter_array_values(term);
-    console.log(termFiltered);
-
+    // console.log(termFiltered);
 
     // Total Net Sum Number Chart
-    var hireTotal = 0
+    var hireTotal = data.length;
     var termTotal = termFiltered.length;
-  //  console.log(termTotal);
+    //  console.log(termTotal);
 
-    for (i = 0; i < data.length; i++) {
-      hireTotal += data[i]['count'];
-    }
+    // for (i = 0; i < data.length; i++) {
+    //   hireTotal += data[i]['count'];
+    // }
     // console.log(hireTotal);
 
     var total = termTotal / hireTotal;
-    console.log(total);
- 
+    // console.log(total);
 
     // (https://plotly.com/python/indicator/)
     var data = [
@@ -255,7 +189,80 @@ function turnOver(sample) {
 
     var config = { responsive: true }
 
-    Plotly.newPlot('turnOver', data, layout, config);
+    Plotly.newPlot('turnover', data, layout, config);
+
+  });
+}
+
+function yearlyTurnover(sample) {
+
+  d3.json("resources/data/custom_hire_data.json").then((dashData) => {
+    // console.log(dashData);
+
+    var data = dashData.filter(sampleObj => sampleObj['Hire Year'] == sample);
+    // console.log(data);
+
+    var term = data.map(term => term['Termination Date']);
+    // console.log(term);
+
+    function filter_array_values(arr) {
+      arr = arr.filter(isEligible);
+      return arr;
+    }
+    
+    function isEligible(value) {
+      if(value !== false || value !== null || value !== 0 || value !== "") {
+        return value;
+      }
+    }
+    // console.log(filter_array_values(term));
+
+    var termFiltered = filter_array_values(term);
+    // console.log(termFiltered);
+
+    // Total Net Sum Number Chart
+    var hireTotal = data.length;
+    var termTotal = termFiltered.length;
+    // console.log(hireTotal);
+    // console.log(termTotal);
+
+    var total = termTotal / hireTotal;
+    // console.log(total);
+
+    // var prefix = d3.format("%");
+    // console.log( prefix(total));
+
+    // (https://plotly.com/python/indicator/)
+    var data = [
+      {
+        type: "indicator",
+        mode: "number",
+        value: total,
+        domain: { row: 1, column: 0 }
+      }
+    ];
+
+    var layout = {
+      height: 150,
+      margin: { t: 50, b: 10, l: 10, r: 10 },
+      grid: { rows: 0, columns: 0, pattern: "independent" },
+      template: {
+        data: {
+          indicator: [
+            {
+
+              title: { text: sample},
+              // mode: "number+delta",
+              // delta: { reference: hireTotal, relative: true}
+            }
+          ]
+        }
+      }
+    };
+
+    var config = { responsive: true }
+
+    Plotly.newPlot('yearlyTurnover', data, layout, config);
 
   });
 }
@@ -266,32 +273,32 @@ function retention(sample) {
     // console.log(dashData);
 
     var data = dashData;//.filter(sampleObj => sampleObj['PLAN NAME'] == sample);
-    console.log(data);
+    // console.log(data);
 
     // (https://stackoverflow.com/questions/15125920/how-to-get-distinct-values-from-an-array-of-objects-in-javascript)
     // Filtering "Position Status" for 'Active' people
     const active = data.filter(act => act['Position Status'] == 'Active');
-    console.log(active);
+    // console.log(active);
 
     // Filterng the array for Distinct values of "Payroll Name"
     const key = 'Payroll Name';
 
     const uniquePeople = [...new Map(active.map(item => [item[key], item])).values()];
-    console.log(uniquePeople);
+    // console.log(uniquePeople);
 
     // Filtering "uniquePeople" array for all people who has worded more than one year to find retention people
     var retentionPeople = uniquePeople.filter(uni => uni['Years of Service'] >= 1 );
-    console.log(retentionPeople);
+    // console.log(retentionPeople);
 
     // Creating total count
     var uniquePeopleCount = uniquePeople.length;
     var retentionPeopleCount = retentionPeople.length;
-    console.log(uniquePeopleCount);
-    console.log(retentionPeopleCount);
+    // console.log(uniquePeopleCount);
+    // console.log(retentionPeopleCount);
 
     // Solution for retention Rate
     var retentionRate = retentionPeopleCount / uniquePeopleCount
-    console.log(retentionRate);
+    // console.log(retentionRate);
 
     // (https://plotly.com/python/indicator/)
     var data = [
@@ -328,15 +335,83 @@ function retention(sample) {
   });
 }
 
+function yearlyRetention(sample) {
+
+  d3.json("resources/data/custom_hire_data.json").then((dashData) => {
+    // console.log(dashData);
+
+    var data = dashData;//.filter(sampleObj => sampleObj['PLAN NAME'] == sample);
+    // console.log(data);
+
+    // (https://stackoverflow.com/questions/15125920/how-to-get-distinct-values-from-an-array-of-objects-in-javascript)
+    // Filtering "Position Status" for 'Active' people
+    const active = data.filter(act => act['Position Status'] == 'Active');
+    // console.log(active);
+
+    // Filterng the array for Distinct values of "Payroll Name"
+    const key = 'Payroll Name';
+
+    const uniquePeople = [...new Map(active.map(item => [item[key], item])).values()];
+    // console.log(uniquePeople);
+
+    // Filtering "uniquePeople" array for all people who has worded more than one year to find retention people
+    var retentionPeople = uniquePeople.filter(uni => uni['Years of Service'] >= 1 );
+    // console.log(retentionPeople);
+
+    // Creating total count
+    var uniquePeopleCount = uniquePeople.length;
+    var retentionPeopleCount = retentionPeople.length;
+    // console.log(uniquePeopleCount);
+    // console.log(retentionPeopleCount);
+
+    // Solution for retention Rate
+    var retentionRate = retentionPeopleCount / uniquePeopleCount
+    // console.log(retentionRate);
+
+    // (https://plotly.com/python/indicator/)
+    var data = [
+      {
+        type: "indicator",
+        mode: "number",
+        value: retentionRate,
+        domain: { row: 1, column: 0 }
+      }
+    ];
+
+    var layout = {
+      height: 150,
+      margin: { t: 50, b: 10, l: 10, r: 10 },
+      grid: { rows: 0, columns: 0, pattern: "independent" },
+      template: {
+        data: {
+          indicator: [
+            {
+              // title: { text: "Overall Retention Rate" },
+              mode: "number",
+              // delta: { reference: termTotal }
+            }
+          ]
+        }
+      }
+    };
+
+    var config = { responsive: true }
+
+    Plotly.newPlot('yearlyRetention', data, layout, config);
+
+
+  });
+}
+
 function init() {
 
   // Grab a reference to the dropdown select element
   var selector = d3.select("#selDataset");
 
-  d3.json("resources/data/enrollment_comparsion_data.json").then((enrollData) => {
+  d3.json("resources/data/custom_hire_data.json").then((dashData) => {
+    // console.log(dashData);
 
-    var data = enrollData.map(pname => pname['PLAN NAME']);
-    // console.log(data);
+    var data = dashData.map(yr => yr['Hire Year']);
 
     // finding unique values
     function onlyUnique(value, index, self) {
@@ -356,11 +431,10 @@ function init() {
     // Use the first sample from the list to build the initial plots
     var firstSample = unique[0];
     // console.log(firstSample);
-    enrollmentBarCharts(firstSample);
-    enrollmentTable(firstSample);
-    keptCount(firstSample);
-    turnOver(firstSample);
+    turnover(firstSample);
+    yearlyTurnover(firstSample);
     retention(firstSample);
+    yearlyRetention(firstsample);
 
   });
 
@@ -369,11 +443,10 @@ function init() {
 function optionChanged(newSample) {
 
   // Fetch new data each time a new sample is selected
-  enrollmentBarCharts(newSample);
-  enrollmentTable(newSample);
-  keptCount(newSample);
-  turnOver(newSample);
+  turnover(newSample);
+  yearlyTurnover(newSample);
   retention(newSample);
+  yearlyRetention(newSample);
   
 }
 
