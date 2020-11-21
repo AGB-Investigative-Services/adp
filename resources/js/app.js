@@ -260,6 +260,10 @@ function turnOver(sample) {
   });
 }
 
+function retention(sample) {
+
+}
+
 function init() {
 
   // Grab a reference to the dropdown select element
@@ -292,6 +296,7 @@ function init() {
     enrollmentTable(firstSample);
     keptCount(firstSample);
     turnOver(firstSample);
+    retention(newSample);
 
   });
 
@@ -304,6 +309,7 @@ function optionChanged(newSample) {
   enrollmentTable(newSample);
   keptCount(newSample);
   turnOver(newSample);
+  retention(newSample);
   
 }
 
