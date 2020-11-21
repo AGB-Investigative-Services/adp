@@ -262,6 +262,23 @@ function turnOver(sample) {
 
 function retention(sample) {
 
+  d3.json("resources/data/custom_hire_data.json").then((dashData) => {
+    // console.log(dashData);
+
+    var data = dashData;//.filter(sampleObj => sampleObj['PLAN NAME'] == sample);
+    console.log(data);
+
+    // (https://stackoverflow.com/questions/15125920/how-to-get-distinct-values-from-an-array-of-objects-in-javascript)
+    const active = data.filter(act => act['Position Status'] == 'Active');
+    console.log(active);
+
+    const key = 'Payroll Name';
+
+    const uniquePeople = [...new Map(active.map(item => [item[key], item])).values()];
+    console.log(uniquePeople);
+
+
+  });
 }
 
 function init() {
@@ -296,7 +313,7 @@ function init() {
     enrollmentTable(firstSample);
     keptCount(firstSample);
     turnOver(firstSample);
-    retention(newSample);
+    retention(firstSample);
 
   });
 
