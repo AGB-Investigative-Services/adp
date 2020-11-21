@@ -269,14 +269,22 @@ function retention(sample) {
     console.log(data);
 
     // (https://stackoverflow.com/questions/15125920/how-to-get-distinct-values-from-an-array-of-objects-in-javascript)
+    // Filtering "Position Status" for 'Active' people
     const active = data.filter(act => act['Position Status'] == 'Active');
     console.log(active);
 
+    // Filterng the array for Distinct values of "Payroll Name"
     const key = 'Payroll Name';
 
     const uniquePeople = [...new Map(active.map(item => [item[key], item])).values()];
     console.log(uniquePeople);
 
+    // Filtering "uniquePeople" array for all people who has worded more than one year to find retention people
+    var retentionPeople = uniquePeople.filter(uni => uni['Years of Service'] >= 1 );
+    console.log(retentionPeople);
+
+    // 
+    
 
   });
 }
