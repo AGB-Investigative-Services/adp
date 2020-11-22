@@ -385,7 +385,7 @@ function yearlyRetention(sample) {
         data: {
           indicator: [
             {
-              title: { text: sample},
+              title: { text: sample + "<br><span style='font-size:0.8em;color:gray'>Worked one year or greater</span>" },
               // mode: "number",
               // delta: { reference: termTotal }
             }
