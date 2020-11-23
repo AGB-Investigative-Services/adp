@@ -424,6 +424,41 @@ function init() {
       return b - a
     });
 
+    var hireData = dashData.map(item => item['Hire Reason Description']);
+    var unique_hireData = hireData.filter(onlyUnique);
+    var sorted_hireData = unique_hireData.sort(function (a, b) {
+      return a - b
+    });
+
+    var positionData = dashData.map(item => item['Position Status']);
+    var unique_positionData = positionData.filter(onlyUnique);
+    var sorted_positionData = unique_positionData.sort(function (a, b) {
+      return a - b
+    });
+
+    var regionData = dashData.map(item => item['Business Unit Description']);
+    var unique_regionData = regionData.filter(onlyUnique);
+    var sorted_regionData = unique_regionData.sort(function (a, b) {
+      return a - b
+    });
+
+    var terminationData = dashData.map(item => item['Voluntary/Involuntary Termination Flag']);
+    var unique_terminationData = terminationData.filter(onlyUnique);
+    var sorted_terminationData = unique_terminationData.sort(function (a, b) {
+      return a - b
+    });
+
+    const yearly = sortedunique;
+    const hireReason = sorted_hireData;
+    const positionStatus = sorted_positionData;
+    const region = sorted_regionData;
+    const terminationType = sorted_terminationData;
+    console.log(hireReason);
+    console.log(positionStatus);
+    console.log(region);
+    console.log(terminationType);
+
+
     sortedunique.forEach((sample) => {
       selector
         .append("option")
