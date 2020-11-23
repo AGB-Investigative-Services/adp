@@ -420,7 +420,11 @@ function init() {
     var unique = data.filter(onlyUnique);
     // console.log(unique);
 
-    unique.forEach((sample) => {
+    var sortedunique = unique.sort(function (a, b) {
+      return b - a
+    });
+
+    sortedunique.forEach((sample) => {
       selector
         .append("option")
         .text(sample)
@@ -428,7 +432,7 @@ function init() {
     });
 
     // Use the first sample from the list to build the initial plots
-    var firstSample = unique[0];
+    var firstSample = sortedunique[0];
     // console.log(firstSample);
     turnover(firstSample);
     yearlyTurnover(firstSample);
