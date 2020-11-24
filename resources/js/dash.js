@@ -409,6 +409,21 @@ class InputTagCollection extends Component {
 
 export default InputTagCollection;
 
+// **************** UNIVERSAL Filter ****************
+allFilterClickListener = (e, filterProp) => {
+  console.log("FILTER clicked", e.target.dataset.name);
+  const name = e.target.dataset.name;
+  this.setState(prevState => ({
+    passingTags: {
+      ...prevState.passingTags,
+      [filterProp]: {
+        ...prevState.passingTags[filterProp],
+        [name]: !prevState.passingTags[filterProp][name]
+      }
+    }
+  }));
+};
+
 function enrollmentBarCharts(sample) {
 
   d3.json("resources/data/enrollment_comparsion_data.json").then((enrollData) => {
