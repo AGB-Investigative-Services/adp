@@ -406,6 +406,10 @@ function dataByRegion(sample) {
     var admin = dashData
       .filter(item => item['Business Unit Description'] == 'Administration')
       .filter(item => item['Hire Year'] == sample);
+
+    var aliciaRegion = dashData
+      .filter(item => item['Business Unit Description'] == 'Alicia\'s Region')
+      .filter(item => item['Hire Year'] == sample);
     
     var administration = [];
     admin.reduce(function (adm, value) {
@@ -417,7 +421,17 @@ function dataByRegion(sample) {
       return adm;
     }, {});
 
-    console.log(administration);
+    var alicia = [];
+    aliciaRegion.reduce(function (ali, value) {
+      if (!ali[value['Position Status']]) {
+        ali[value['Position Status']] = { 'Position Status': value['Position Status'], 'count': 0 };
+        alicia.push(ali[value['Position Status']])
+      }
+      ali[value['Position Status']]['count'] += value['count'];
+      return ali;
+    }, {});
+
+    console.log(alicia);
 
     // Display the pie chart
     var data = [{
@@ -429,11 +443,13 @@ function dataByRegion(sample) {
     console.log(data);
 
     var layout = {
-      height: 600,
-      width: 800
+      height: 'auto', 
+      width: 'auto'
     };
 
-    Plotly.newPlot("pie", data, layout);
+    var config = { responsive: true }
+
+    Plotly.newPlot("pie", data, layout, config);
 
   });
 
@@ -445,9 +461,10 @@ d3.selectAll("#selregion").on("change", getData);
 // Function called by DOM changes
 function getData() {
   var dropdownMenu = d3.select("#selregion");
+  
   // Assign the value of the dropdown menu option to a variable
   var dataset = dropdownMenu.property("value");
-  // Initialize an empty array for the country's data
+  // Initialize an empty array for the region's data
   var data = [];
 
   if (dataset == 'Administration') {
@@ -455,6 +472,9 @@ function getData() {
   }
   else if (dataset == 'Alicia\'s Region') {
     data = alicia;
+  }
+  else if (dataset == 'Steve\'s Region') {
+    data = steve;
   }
 
   // Call function to update the chart
@@ -499,6 +519,7 @@ function init() {
     retention(firstSample);
     yearlyRetention(firstSample);
     dashBarCharts(firstSample);
+    // getData();
     dataByRegion(firstSample);
 
   });
@@ -513,6 +534,7 @@ function optionChanged(newSample) {
   retention(newSample);
   yearlyRetention(newSample);
   dashBarCharts(newSample);
+  // getData();
   dataByRegion(newSample);
   
 }
