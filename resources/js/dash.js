@@ -410,6 +410,18 @@ function dataByRegion(sample) {
     var aliciaRegion = dashData
       .filter(item => item['Business Unit Description'] == 'Alicia\'s Region')
       .filter(item => item['Hire Year'] == sample);
+
+    var steveRegion = dashData
+      .filter(item => item['Business Unit Description'] == 'Steve\'s Region')
+      .filter(item => item['Hire Year'] == sample);
+
+    var darrylRegion = dashData
+      .filter(item => item['Business Unit Description'] == 'Darryl\'s Region')
+      .filter(item => item['Hire Year'] == sample);
+
+    var odomRegion = dashData
+      .filter(item => item['Business Unit Description'] == 'Odom\'s Region')
+      .filter(item => item['Hire Year'] == sample);
     
     var administration = [];
     admin.reduce(function (adm, value) {
@@ -431,7 +443,37 @@ function dataByRegion(sample) {
       return ali;
     }, {});
 
-    console.log(alicia);
+    var steve = [];
+    steveRegion.reduce(function (stv, value) {
+      if (!stv[value['Position Status']]) {
+        stv[value['Position Status']] = { 'Position Status': value['Position Status'], 'count': 0 };
+        steve.push(stv[value['Position Status']])
+      }
+      stv[value['Position Status']]['count'] += value['count'];
+      return stv;
+    }, {});
+
+    var darryl = [];
+    darrylRegion.reduce(function (dyl, value) {
+      if (!dyl[value['Position Status']]) {
+        dyl[value['Position Status']] = { 'Position Status': value['Position Status'], 'count': 0 };
+        darryl.push(dyl[value['Position Status']])
+      }
+      dyl[value['Position Status']]['count'] += value['count'];
+      return dyl;
+    }, {});
+
+    var odom = [];
+    odomRegion.reduce(function (dm, value) {
+      if (!dm[value['Position Status']]) {
+        dm[value['Position Status']] = { 'Position Status': value['Position Status'], 'count': 0 };
+        odom.push(dm[value['Position Status']])
+      }
+      dm[value['Position Status']]['count'] += value['count'];
+      return dm;
+    }, {});
+
+    console.log(odom);
 
     // Display the pie chart
     var data = [{
@@ -459,26 +501,107 @@ function dataByRegion(sample) {
 d3.selectAll("#selregion").on("change", getData);
 
 // Function called by DOM changes
-function getData() {
-  var dropdownMenu = d3.select("#selregion");
-  
-  // Assign the value of the dropdown menu option to a variable
-  var dataset = dropdownMenu.property("value");
-  // Initialize an empty array for the region's data
-  var data = [];
+function getData(sample) {
+  d3.json("resources/data/custom_hire_data.json").then((dashData) => {
+    // console.log(dashData);
 
-  if (dataset == 'Administration') {
-    data = administration;
-  }
-  else if (dataset == 'Alicia\'s Region') {
-    data = alicia;
-  }
-  else if (dataset == 'Steve\'s Region') {
-    data = steve;
-  }
+    // Create an array of each region
+    var admin = dashData
+      .filter(item => item['Business Unit Description'] == 'Administration')
+      .filter(item => item['Hire Year'] == sample);
 
-  // Call function to update the chart
-  updatePlotly(data);
+    var aliciaRegion = dashData
+      .filter(item => item['Business Unit Description'] == 'Alicia\'s Region')
+      .filter(item => item['Hire Year'] == sample);
+
+    var steveRegion = dashData
+      .filter(item => item['Business Unit Description'] == 'Steve\'s Region')
+      .filter(item => item['Hire Year'] == sample);
+
+    var darrylRegion = dashData
+      .filter(item => item['Business Unit Description'] == 'Darryl\'s Region')
+      .filter(item => item['Hire Year'] == sample);
+
+    var odomRegion = dashData
+      .filter(item => item['Business Unit Description'] == 'Odom\'s Region')
+      .filter(item => item['Hire Year'] == sample);
+
+    var administration = [];
+    admin.reduce(function (adm, value) {
+      if (!adm[value['Position Status']]) {
+        adm[value['Position Status']] = { 'Position Status': value['Position Status'], 'count': 0 };
+        administration.push(adm[value['Position Status']])
+      }
+      adm[value['Position Status']]['count'] += value['count'];
+      return adm;
+    }, {});
+
+    var alicia = [];
+    aliciaRegion.reduce(function (ali, value) {
+      if (!ali[value['Position Status']]) {
+        ali[value['Position Status']] = { 'Position Status': value['Position Status'], 'count': 0 };
+        alicia.push(ali[value['Position Status']])
+      }
+      ali[value['Position Status']]['count'] += value['count'];
+      return ali;
+    }, {});
+
+    var steve = [];
+    steveRegion.reduce(function (stv, value) {
+      if (!stv[value['Position Status']]) {
+        stv[value['Position Status']] = { 'Position Status': value['Position Status'], 'count': 0 };
+        steve.push(stv[value['Position Status']])
+      }
+      stv[value['Position Status']]['count'] += value['count'];
+      return stv;
+    }, {});
+
+    var darryl = [];
+    darrylRegion.reduce(function (dyl, value) {
+      if (!dyl[value['Position Status']]) {
+        dyl[value['Position Status']] = { 'Position Status': value['Position Status'], 'count': 0 };
+        darryl.push(dyl[value['Position Status']])
+      }
+      dyl[value['Position Status']]['count'] += value['count'];
+      return dyl;
+    }, {});
+
+    var odom = [];
+    odomRegion.reduce(function (dm, value) {
+      if (!dm[value['Position Status']]) {
+        dm[value['Position Status']] = { 'Position Status': value['Position Status'], 'count': 0 };
+        odom.push(dm[value['Position Status']])
+      }
+      dm[value['Position Status']]['count'] += value['count'];
+      return dm;
+    }, {});
+    var dropdownMenu = d3.select("#selregion");
+    
+    // Assign the value of the dropdown menu option to a variable
+    var dataset = dropdownMenu.property("value");
+    // Initialize an empty array for the region's data
+    var data = [];
+
+    if (dataset == 'Administration') {
+      data = administration.map(item => item['count']);
+    }
+    else if (dataset == 'Alicia\'s Region') {
+      data = alicia.map(item => item['count']);
+    }
+    else if (dataset == 'Steve\'s Region') {
+      data = steve.map(item => item['count']);
+    }
+    else if (dataset == 'Darryl\'s Region') {
+      data = darryl.map(item => item['count']);
+    }
+    else if (dataset == 'Odom\'s Region') {
+      data = odom.map(item => item['count']);
+    }
+    console.log(data);
+    
+    // Call function to update the chart
+    updatePlotly(data);
+  });
 }
 
 // Update the restyled plot's values
@@ -519,7 +642,6 @@ function init() {
     retention(firstSample);
     yearlyRetention(firstSample);
     dashBarCharts(firstSample);
-    // getData();
     dataByRegion(firstSample);
 
   });
@@ -534,7 +656,6 @@ function optionChanged(newSample) {
   retention(newSample);
   yearlyRetention(newSample);
   dashBarCharts(newSample);
-  // getData();
   dataByRegion(newSample);
   
 }
