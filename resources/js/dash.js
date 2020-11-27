@@ -133,9 +133,9 @@ function turnover(sample) {
       arr = arr.filter(isEligible);
       return arr;
     }
-    
+
     function isEligible(value) {
-      if(value !== false || value !== null || value !== 0 || value !== "") {
+      if (value !== false || value !== null || value !== 0 || value !== "") {
         return value;
       }
     }
@@ -205,9 +205,9 @@ function yearlyTurnover(sample) {
       arr = arr.filter(isEligible);
       return arr;
     }
-    
+
     function isEligible(value) {
-      if(value !== false || value !== null || value !== 0 || value !== "") {
+      if (value !== false || value !== null || value !== 0 || value !== "") {
         return value;
       }
     }
@@ -246,7 +246,7 @@ function yearlyTurnover(sample) {
         data: {
           indicator: [
             {
-              title: { text: sample},
+              title: { text: sample },
               // mode: "number+delta",
               // delta: { reference: hireTotal, relative: true}
             }
@@ -282,7 +282,7 @@ function retention(sample) {
     // console.log(uniquePeople);
 
     // Filtering "uniquePeople" array for all people who has worded more than one year to find retention people
-    var retentionPeople = uniquePeople.filter(uni => uni['Years of Service'] >= 1 );
+    var retentionPeople = uniquePeople.filter(uni => uni['Years of Service'] >= 1);
     // console.log(retentionPeople);
 
     // Creating total count
@@ -350,7 +350,7 @@ function yearlyRetention(sample) {
     // console.log(uniquePeople);
 
     // Filtering "uniquePeople" array for all people who has worded more than one year to find retention people
-    var retentionPeople = uniquePeople.filter(uni => uni['Years of Service'] >= 1 );
+    var retentionPeople = uniquePeople.filter(uni => uni['Years of Service'] >= 1);
     // console.log(retentionPeople);
 
     // Creating total count
@@ -422,7 +422,7 @@ function dataByRegion(sample) {
     var odomRegion = dashData
       .filter(item => item['Business Unit Description'] == 'Odom\'s Region')
       .filter(item => item['Hire Year'] == sample);
-    
+
     var administration = [];
     admin.reduce(function (adm, value) {
       if (!adm[value['Position Status']]) {
@@ -485,7 +485,7 @@ function dataByRegion(sample) {
     console.log(data);
 
     var layout = {
-      height: 'auto', 
+      height: 'auto',
       width: 'auto'
     };
 
@@ -493,115 +493,211 @@ function dataByRegion(sample) {
 
     Plotly.newPlot("pie", data, layout, config);
 
+
+    var administrationTerm = [];
+    admin.reduce(function (adm, value) {
+      if (!adm[value['Voluntary/Involuntary Termination Flag']]) {
+        adm[value['Voluntary/Involuntary Termination Flag']] = { 'Voluntary/Involuntary Termination Flag': value['Voluntary/Involuntary Termination Flag'], 'count': 0 };
+        administrationTerm.push(adm[value['Voluntary/Involuntary Termination Flag']])
+      }
+      adm[value['Voluntary/Involuntary Termination Flag']]['count'] += value['count'];
+      return adm;
+    }, {});
+
+    var aliciaTerm = [];
+    aliciaRegion.reduce(function (ali, value) {
+      if (!ali[value['Voluntary/Involuntary Termination Flag']]) {
+        ali[value['Voluntary/Involuntary Termination Flag']] = { 'Voluntary/Involuntary Termination Flag': value['Voluntary/Involuntary Termination Flag'], 'count': 0 };
+        aliciaTerm.push(ali[value['Voluntary/Involuntary Termination Flag']])
+      }
+      ali[value['Voluntary/Involuntary Termination Flag']]['count'] += value['count'];
+      return ali;
+    }, {});
+
+    var steveTerm = [];
+    steveRegion.reduce(function (stv, value) {
+      if (!stv[value['Voluntary/Involuntary Termination Flag']]) {
+        stv[value['Voluntary/Involuntary Termination Flag']] = { 'Voluntary/Involuntary Termination Flag': value['Voluntary/Involuntary Termination Flag'], 'count': 0 };
+        steveTerm.push(stv[value['Voluntary/Involuntary Termination Flag']])
+      }
+      stv[value['Voluntary/Involuntary Termination Flag']]['count'] += value['count'];
+      return stv;
+    }, {});
+
+    var darrylTerm = [];
+    darrylRegion.reduce(function (dyl, value) {
+      if (!dyl[value['Voluntary/Involuntary Termination Flag']]) {
+        dyl[value['Voluntary/Involuntary Termination Flag']] = { 'Voluntary/Involuntary Termination Flag': value['Voluntary/Involuntary Termination Flag'], 'count': 0 };
+        darrylTerm.push(dyl[value['Voluntary/Involuntary Termination Flag']])
+      }
+      dyl[value['Voluntary/Involuntary Termination Flag']]['count'] += value['count'];
+      return dyl;
+    }, {});
+
+    var odomTerm = [];
+    odomRegion.reduce(function (dm, value) {
+      if (!dm[value['Voluntary/Involuntary Termination Flag']]) {
+        dm[value['Voluntary/Involuntary Termination Flag']] = { 'Voluntary/Involuntary Termination Flag': value['Voluntary/Involuntary Termination Flag'], 'count': 0 };
+        odomTerm.push(dm[value['Voluntary/Involuntary Termination Flag']])
+      }
+      dm[value['Voluntary/Involuntary Termination Flag']]['count'] += value['count'];
+      return dm;
+    }, {});
+
+    console.log(odomTerm);
+
+    // Display the pie chart
+    var data = [{
+      values: administrationTerm.map(item => item['count']),
+      labels: administrationTerm.map(item => item['Voluntary/Involuntary Termination Flag']),
+      type: "pie"
+    }];
+
+    console.log(data);
+
+    var layout = {
+      height: 'auto',
+      width: 'auto'
+    };
+
+    var config = { responsive: true }
+
+    Plotly.newPlot("pieTerm", data, layout, config);
+
   });
 
 }
+
 
 // On change to the DOM, call getData()
 d3.selectAll("#selregion").on("change", getData);
 
 // Function called by DOM changes
-function getData(sample) {
-  d3.json("resources/data/custom_hire_data.json").then((dashData) => {
-    // console.log(dashData);
+function getData() {
 
-    // Create an array of each region
-    var admin = dashData
-      .filter(item => item['Business Unit Description'] == 'Administration')
-      .filter(item => item['Hire Year'] == sample);
+  var dropdownMenu = d3.select("#selregion");
 
-    var aliciaRegion = dashData
-      .filter(item => item['Business Unit Description'] == 'Alicia\'s Region')
-      .filter(item => item['Hire Year'] == sample);
+  // Assign the value of the dropdown menu option to a variable
+  var dataset = dropdownMenu.property("value");
+  // Initialize an empty array for the region's data
+  var data = [];
 
-    var steveRegion = dashData
-      .filter(item => item['Business Unit Description'] == 'Steve\'s Region')
-      .filter(item => item['Hire Year'] == sample);
+  if (dataset == 'Administration') {
+    // Function called by DOM changes
 
-    var darrylRegion = dashData
-      .filter(item => item['Business Unit Description'] == 'Darryl\'s Region')
-      .filter(item => item['Hire Year'] == sample);
+    d3.json("resources/data/custom_hire_data.json").then((dashData) => {
+      // console.log(dashData);
 
-    var odomRegion = dashData
-      .filter(item => item['Business Unit Description'] == 'Odom\'s Region')
-      .filter(item => item['Hire Year'] == sample);
+      var admin = dashData.filter(item => item['Business Unit Description'] == 'Administration');
+      // .filter(item => item['Hire Year'] == sample);
 
-    var administration = [];
-    admin.reduce(function (adm, value) {
-      if (!adm[value['Position Status']]) {
-        adm[value['Position Status']] = { 'Position Status': value['Position Status'], 'count': 0 };
-        administration.push(adm[value['Position Status']])
-      }
-      adm[value['Position Status']]['count'] += value['count'];
-      return adm;
-    }, {});
+      var administration = [];
+      admin.reduce(function (adm, value) {
+        if (!adm[value['Position Status']]) {
+          adm[value['Position Status']] = { 'Position Status': value['Position Status'], 'count': 0 };
+          administration.push(adm[value['Position Status']])
+        }
+        adm[value['Position Status']]['count'] += value['count'];
+        return adm;
+      }, {});
 
-    var alicia = [];
-    aliciaRegion.reduce(function (ali, value) {
-      if (!ali[value['Position Status']]) {
-        ali[value['Position Status']] = { 'Position Status': value['Position Status'], 'count': 0 };
-        alicia.push(ali[value['Position Status']])
-      }
-      ali[value['Position Status']]['count'] += value['count'];
-      return ali;
-    }, {});
-
-    var steve = [];
-    steveRegion.reduce(function (stv, value) {
-      if (!stv[value['Position Status']]) {
-        stv[value['Position Status']] = { 'Position Status': value['Position Status'], 'count': 0 };
-        steve.push(stv[value['Position Status']])
-      }
-      stv[value['Position Status']]['count'] += value['count'];
-      return stv;
-    }, {});
-
-    var darryl = [];
-    darrylRegion.reduce(function (dyl, value) {
-      if (!dyl[value['Position Status']]) {
-        dyl[value['Position Status']] = { 'Position Status': value['Position Status'], 'count': 0 };
-        darryl.push(dyl[value['Position Status']])
-      }
-      dyl[value['Position Status']]['count'] += value['count'];
-      return dyl;
-    }, {});
-
-    var odom = [];
-    odomRegion.reduce(function (dm, value) {
-      if (!dm[value['Position Status']]) {
-        dm[value['Position Status']] = { 'Position Status': value['Position Status'], 'count': 0 };
-        odom.push(dm[value['Position Status']])
-      }
-      dm[value['Position Status']]['count'] += value['count'];
-      return dm;
-    }, {});
-    var dropdownMenu = d3.select("#selregion");
-    
-    // Assign the value of the dropdown menu option to a variable
-    var dataset = dropdownMenu.property("value");
-    // Initialize an empty array for the region's data
-    var data = [];
-
-    if (dataset == 'Administration') {
       data = administration.map(item => item['count']);
-    }
-    else if (dataset == 'Alicia\'s Region') {
+      console.log(data);
+
+    });
+  }
+  else if (dataset == 'Alicia') {
+
+    d3.json("resources/data/custom_hire_data.json").then((dashData) => {
+
+      var aliciaRegion = dashData.filter(item => item['Business Unit Description'] == 'Alicia\'s Region');
+      // .filter(item => item['Hire Year'] == sample);
+
+      var alicia = [];
+      aliciaRegion.reduce(function (ali, value) {
+        if (!ali[value['Position Status']]) {
+          ali[value['Position Status']] = { 'Position Status': value['Position Status'], 'count': 0 };
+          alicia.push(ali[value['Position Status']])
+        }
+        ali[value['Position Status']]['count'] += value['count'];
+        return ali;
+      }, {});
+
       data = alicia.map(item => item['count']);
-    }
-    else if (dataset == 'Steve\'s Region') {
+      console.log(data);
+
+    });
+  }
+  else if (dataset == 'Steve') {
+
+    d3.json("resources/data/custom_hire_data.json").then((dashData) => {
+
+      var steveRegion = dashData.filter(item => item['Business Unit Description'] == 'Steve\'s Region');
+      // .filter(item => item['Hire Year'] == sample);
+
+      var steve = [];
+      steveRegion.reduce(function (stv, value) {
+        if (!stv[value['Position Status']]) {
+          stv[value['Position Status']] = { 'Position Status': value['Position Status'], 'count': 0 };
+          steve.push(stv[value['Position Status']])
+        }
+        stv[value['Position Status']]['count'] += value['count'];
+        return stv;
+      }, {});
+
       data = steve.map(item => item['count']);
-    }
-    else if (dataset == 'Darryl\'s Region') {
+      console.log(data);
+
+    });
+  }
+  else if (dataset == 'Darryl') {
+
+    d3.json("resources/data/custom_hire_data.json").then((dashData) => {
+
+      var darrylRegion = dashData.filter(item => item['Business Unit Description'] == 'Darryl\'s Region');
+      // .filter(item => item['Hire Year'] == sample);
+
+      var darryl = [];
+      darrylRegion.reduce(function (dyl, value) {
+        if (!dyl[value['Position Status']]) {
+          dyl[value['Position Status']] = { 'Position Status': value['Position Status'], 'count': 0 };
+          darryl.push(dyl[value['Position Status']])
+        }
+        dyl[value['Position Status']]['count'] += value['count'];
+        return dyl;
+      }, {});
+
       data = darryl.map(item => item['count']);
-    }
-    else if (dataset == 'Odom\'s Region') {
+      console.log(data);
+
+    });
+  }
+  else if (dataset == 'Odom') {
+
+    d3.json("resources/data/custom_hire_data.json").then((dashData) => {
+
+      var odomRegion = dashData.filter(item => item['Business Unit Description'] == 'Odom\'s Region');
+      // .filter(item => item['Hire Year'] == sample);
+
+      var odom = [];
+      odomRegion.reduce(function (dm, value) {
+        if (!dm[value['Position Status']]) {
+          dm[value['Position Status']] = { 'Position Status': value['Position Status'], 'count': 0 };
+          odom.push(dm[value['Position Status']])
+        }
+        dm[value['Position Status']]['count'] += value['count'];
+        return dm;
+      }, {});
+
       data = odom.map(item => item['count']);
-    }
-    console.log(data);
-    
-    // Call function to update the chart
-    updatePlotly(data);
-  });
+      console.log(data);
+
+    });
+
+  }
+  // Call function to update the chart
+  updatePlotly(data);
+
 }
 
 // Update the restyled plot's values
@@ -657,7 +753,7 @@ function optionChanged(newSample) {
   yearlyRetention(newSample);
   dashBarCharts(newSample);
   dataByRegion(newSample);
-  
+
 }
 
 // Initialize the dashboard
