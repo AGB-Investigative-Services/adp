@@ -1,12 +1,12 @@
 function newHireBarChart(sample) {
 
-    d3.json("resources/data/Performance_Reviews_Report.json").then((data) => {
+    d3.json("resources/data/performance_reviews_report.json").then((data) => {
         console.log(data);
 
         var data30 = data.filter(sampleObj => sampleObj['Review Name'] == '30 Day New Hire Review');
         console.log(data30);
 
-        var data90 = data.filter(sampleObj => sampleObj['Review Name'] == '90 Day New Hire Review');
+        var data90 = data.filter(sampleObj => sampleObj['Review Name'] == '90 Day New HIre Review');
         console.log(data90);
 
         var data180 = data.filter(sampleObj => sampleObj['Review Name'] == '180 Day New Hire Review');
@@ -14,58 +14,75 @@ function newHireBarChart(sample) {
 
 
         // (https://stackoverflow.com/questions/29364262/how-to-group-by-and-sum-array-of-object)
-        var hire30 = [];
+        var review30 = [];
         // (https://www.w3schools.com/jsref/jsref_reduce.asp)
-        data30.reduce(function (hr30, value) {
-            if (!hr30[value['Business Unit Description']]) {
-                hr30[value['Business Unit Description']] = { 'Business Unit Description': value['Business Unit Description'], 'count': 0 };
-                hire30.push(hr30[value['Business Unit Description']])
+        data30.reduce(function (item, value) {
+            if (!item[value['Business Unit Description']]) {
+                item[value['Business Unit Description']] = { 'Business Unit Description': value['Business Unit Description'], 'count': 0 };
+                review30.push(item[value['Business Unit Description']])
             }
-            hr30[value['Business Unit Description']]['count'] += value['count'];
-            return hr30;
+            item[value['Business Unit Description']]['count'] += value['count'];
+            return item;
         }, {});
 
-        var hire90 = [];
-        // (https://www.w3schools.com/jsref/jsref_reduce.asp)
-        data90.reduce(function (hr90, value) {
-            if (!hr90[value['Business Unit Description']]) {
-                hr90[value['Business Unit Description']] = { 'Business Unit Description': value['Business Unit Description'], 'count': 0 };
-                hire90.push(hr90[value['Business Unit Description']])
+        var review90 = [];
+        data90.reduce(function (item, value) {
+            if (!item[value['Business Unit Description']]) {
+                item[value['Business Unit Description']] = { 'Business Unit Description': value['Business Unit Description'], 'count': 0 };
+                review90.push(item[value['Business Unit Description']])
             }
-            hr90[value['Business Unit Description']]['count'] += value['count'];
-            return hr90;
+            item[value['Business Unit Description']]['count'] += value['count'];
+            return item;
+        }, {});
+
+        var review180 = [];
+        data180.reduce(function (item, value) {
+            if (!item[value['Business Unit Description']]) {
+                item[value['Business Unit Description']] = { 'Business Unit Description': value['Business Unit Description'], 'count': 0 };
+                review180.push(item[value['Business Unit Description']])
+            }
+            item[value['Business Unit Description']]['count'] += value['count'];
+            return item;
         }, {});
 
 
-        console.log(hire30);
-        console.log(hire90);
+        console.log(review30);
+        console.log(review90);
 
-        var sortedretention = hire30.sort(function (a, b) {
+        var sortedreview30 = review30.sort(function (a, b) {
             return b['count'] - a['count']
         });
 
-        console.log(sortedhire30);
+        console.log(sortedreview30);
 
         var trace1 = {
             type: 'bar',
-            x: hire30.map(row => row['Business Unit Description']),
-            y: hire30.map(row => row['count']),
-            text: "Turnover Rate",
-            text: hire30.map(row => row['count']),
+            x: review30.map(row => row['Business Unit Description']),
+            y: review30.map(row => row['count']),
+            text: review30.map(row => row['count']),
             textposition: 'auto',
-            name: 'Turnover Rate',
+            name: '30 Day New Hire Review',
         };
 
         var trace2 = {
             type: 'bar',
-            x: retention.map(row => row['Business Unit Description']),
-            y: retention.map(row => row['count']),
-            text: retention.map(row => row['count']),
+            x: review90.map(row => row['Business Unit Description']),
+            y: review90.map(row => row['count']),
+            text: review90.map(row => row['count']),
             textposition: 'auto',
-            name: 'Retention Rate',
+            name: '90 Day New Hire Review',
         };
 
-        var data = [trace1, trace2];
+        var trace3 = {
+            type: 'bar',
+            x: review180.map(row => row['Business Unit Description']),
+            y: review180.map(row => row['count']),
+            text: review180.map(row => row['count']),
+            textposition: 'auto',
+            name: '180 Day New Hire Review',
+        };
+
+        var data = [trace1, trace2, trace3];
 
         var layout = {
             title: 'Status of New Hire by Region',
@@ -76,14 +93,15 @@ function newHireBarChart(sample) {
 
         var config = { responsive: true }
 
-        Plotly.newPlot('retentionRate', data, layout, config);
+        Plotly.newPlot('30-90-180', data, layout, config);
 
     });
 
 }
+
 function init() {
 
-    d3.json("resources/data/custom_hire_data.json").then((dashData) => {
+    d3.json("resources/data/performance_reviews_report.json").then((dashData) => {
 
         // Creating a function to find unique values
         function onlyUnique(value, index, self) {
