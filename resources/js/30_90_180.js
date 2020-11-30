@@ -1,15 +1,21 @@
-function newHireBarChart(sample) {
+function reviewBarChart(sample) {
 
     d3.json("resources/data/performance_reviews_report.json").then((data) => {
         console.log(data);
 
-        var data30 = data.filter(sampleObj => sampleObj['Review Name'] == '30 Day New Hire Review');
+        var data30 = data
+            .filter(sampleObj => sampleObj['Review Name'] == '30 Day New Hire Review')
+            .filter(sampleObj => sampleObj['Review Detail Status'] == 'Not Started');
         console.log(data30);
 
-        var data90 = data.filter(sampleObj => sampleObj['Review Name'] == '90 Day New HIre Review');
+        var data90 = data
+            .filter(sampleObj => sampleObj['Review Name'] == '90 Day New HIre Review')
+            .filter(sampleObj => sampleObj['Review Detail Status'] == 'Not Started');
         console.log(data90);
 
-        var data180 = data.filter(sampleObj => sampleObj['Review Name'] == '180 Day New Hire Review');
+        var data180 = data
+            .filter(sampleObj => sampleObj['Review Name'] == '180 Day New Hire Review')
+            .filter(sampleObj => sampleObj['Review Detail Status'] == 'Not Started');
         console.log(data180);
 
 
@@ -45,15 +51,9 @@ function newHireBarChart(sample) {
             return item;
         }, {});
 
-
-        console.log(review30);
-        console.log(review90);
-
         var sortedreview30 = review30.sort(function (a, b) {
             return b['count'] - a['count']
         });
-
-        console.log(sortedreview30);
 
         var trace1 = {
             type: 'bar',
@@ -85,10 +85,10 @@ function newHireBarChart(sample) {
         var data = [trace1, trace2, trace3];
 
         var layout = {
-            title: 'Status of New Hire by Region',
+            title: '30-90-180 Reviews Not Started',
             barmode: 'group',
             xaxis: { title: 'Business Unit Description' },
-            yaxis: { title: 'Retention Rates and Turnover Rates' },
+            yaxis: { title: '# of Employees' },
         };
 
         var config = { responsive: true }
@@ -99,16 +99,58 @@ function newHireBarChart(sample) {
 
 }
 
+function reviewPieChart(sample) {
+
+    d3.json("resources/data/performance_reviews_report.json").then((data) => {
+        console.log(data);
+
+        // Create an array of each region
+        var reviewData = data
+
+        console.log(reviewData);
+
+        var reviewDays = [];
+        reviewData.reduce(function (item, value) {
+            if (!item[value['Review Name']]) {
+                item[value['Review Name']] = { 'Review Name': value['Review Name'], 'count': 0 };
+                reviewDays.push(item[value['Review Name']])
+            }
+            item[value['Review Name']]['count'] += value['count'];
+            return item;
+        }, {});
+
+        // Display the pie chart
+        var data = [{
+            values: reviewDays.map(item => item['count']),
+            labels: reviewDays.map(item => item['Review Name']),
+            type: "pie"
+        }];
+
+        console.log(data);
+
+        var layout = {
+            height: 'auto',
+            width: 'auto'
+        };
+
+        var config = { responsive: true }
+
+        Plotly.newPlot("pie", data, layout, config);
+
+    });
+
+}
+
 function init() {
 
-    d3.json("resources/data/performance_reviews_report.json").then((dashData) => {
+    d3.json("resources/data/performance_reviews_report.json").then((data) => {
 
         // Creating a function to find unique values
         function onlyUnique(value, index, self) {
             return self.indexOf(value) === index;
         }
 
-        var data = dashData.map(yr => yr['Hire Year']);
+        var data = data.map(yr => yr['Hire Year']);
         var unique = data.filter(onlyUnique);
         var sortedunique = unique.sort(function (a, b) {
             return b - a
@@ -126,8 +168,9 @@ function init() {
 
         // Use the first sample from the list to build the initial plots
         var firstSample = sortedunique[0];
-
-        newHireBarChart(firstSample);
+        
+        reviewBarChart(firstSample);
+        reviewPieChart(firstSample);
 
     });
 
@@ -136,7 +179,8 @@ function init() {
 function optionChanged(newSample) {
 
     // Fetch new data each time a new sample is selected
-    newHireBarChart(newSample);
+    reviewBarChart(newSample);
+    reviewPieChart(newSample);
 }
 
 //Initialize the dashboard
