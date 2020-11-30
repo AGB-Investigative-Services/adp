@@ -1,51 +1,57 @@
 function newHireBarChart(sample) {
 
-    d3.json("resources/data/custom_hire_data.json").then((dashData) => {
-        // console.log(dashData);
+    d3.json("resources/data/Performance_Reviews_Report.json").then((data) => {
+        console.log(data);
 
-        var data = dashData.filter(sampleObj => sampleObj['Hire Year'] == sample);
-        // console.log(data);
-        var term = data.filter(term => term['Termination Date'] > 0);
-        // console.log(term);
+        var data30 = data.filter(sampleObj => sampleObj['Review Name'] == '30 Day New Hire Review');
+        console.log(data30);
+
+        var data90 = data.filter(sampleObj => sampleObj['Review Name'] == '90 Day New Hire Review');
+        console.log(data90);
+
+        var data180 = data.filter(sampleObj => sampleObj['Review Name'] == '180 Day New Hire Review');
+        console.log(data180);
 
 
         // (https://stackoverflow.com/questions/29364262/how-to-group-by-and-sum-array-of-object)
-        var termination = [];
+        var hire30 = [];
         // (https://www.w3schools.com/jsref/jsref_reduce.asp)
-        term.reduce(function (trm, value) {
-            if (!trm[value['Business Unit Description']]) {
-                trm[value['Business Unit Description']] = { 'Business Unit Description': value['Business Unit Description'], 'count': 0 };
-                termination.push(trm[value['Business Unit Description']])
+        data30.reduce(function (hr30, value) {
+            if (!hr30[value['Business Unit Description']]) {
+                hr30[value['Business Unit Description']] = { 'Business Unit Description': value['Business Unit Description'], 'count': 0 };
+                hire30.push(hr30[value['Business Unit Description']])
             }
-            trm[value['Business Unit Description']]['count'] += value['count'];
-            return trm;
+            hr30[value['Business Unit Description']]['count'] += value['count'];
+            return hr30;
         }, {});
 
-        var retention = [];
-        data.reduce(function (ret, value) {
-            if (!ret[value['Business Unit Description']]) {
-                ret[value['Business Unit Description']] = { 'Business Unit Description': value['Business Unit Description'], 'count': 0 };
-                retention.push(ret[value['Business Unit Description']])
+        var hire90 = [];
+        // (https://www.w3schools.com/jsref/jsref_reduce.asp)
+        data90.reduce(function (hr90, value) {
+            if (!hr90[value['Business Unit Description']]) {
+                hr90[value['Business Unit Description']] = { 'Business Unit Description': value['Business Unit Description'], 'count': 0 };
+                hire90.push(hr90[value['Business Unit Description']])
             }
-            ret[value['Business Unit Description']]['count'] += value['count'];
-            return ret;
+            hr90[value['Business Unit Description']]['count'] += value['count'];
+            return hr90;
         }, {});
 
-        // console.log(termination);
-        // console.log(retention);
 
-        var sortedretention = retention.sort(function (a, b) {
+        console.log(hire30);
+        console.log(hire90);
+
+        var sortedretention = hire30.sort(function (a, b) {
             return b['count'] - a['count']
         });
 
-        console.log(sortedretention);
+        console.log(sortedhire30);
 
         var trace1 = {
             type: 'bar',
-            x: termination.map(row => row['Business Unit Description']),
-            y: termination.map(row => row['count']),
+            x: hire30.map(row => row['Business Unit Description']),
+            y: hire30.map(row => row['count']),
             text: "Turnover Rate",
-            text: termination.map(row => row['count']),
+            text: hire30.map(row => row['count']),
             textposition: 'auto',
             name: 'Turnover Rate',
         };
