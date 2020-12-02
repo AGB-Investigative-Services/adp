@@ -46,7 +46,7 @@
                 <a href="index.html">Credentials</a>
                 <a href="index.html">Discrepanies</a>
                 <a href="index.html">Annual Reviews</a>
-                <a href="index.html">30-90-180</a>
+                <a href="30_90_180.html">30-90-180</a>
                 <a href="dash.html">Annual Dash</a>
             </div>
         </div>
@@ -55,12 +55,24 @@
             <div class="col-md-2">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        Year Filter
+                        Year
                     </div>
                 </div>
                 <div class="well">
                     <!-- <h5>Plan Names</h5> -->
                     <select id="selDataset" onchange="optionChanged(this.value)"></select>
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        Hire Reason
+                    </div>
+                </div>
+                <div class="well">
+                    <!-- <h5>Plan Names</h5> -->
+                    <select id="hireDataset" onchange="optionChanged(this.value)"></select>
                 </div>
             </div>
         </div>
@@ -97,6 +109,40 @@
                     </div>
                 </div>
                 <div id="yearlyRetention"></div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        Overall Turnover Rate
+                    </div>
+                </div>
+                <div id="retentionRate"></div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="well">
+                    <h2>Panel By Region</h2>
+                    <select id="selregion" onchange="getData(this.value)">
+                        <option value="Administration">Administration</option>
+                        <option value="Alicia">Alicia's Region</option>
+                        <option value="Darryl">Darryl's Region</option>
+                        <option value="Odom">Odom's Region</option>
+                        <option value="Steve">Steve's Region</option>
+                    </select>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div id="pie"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="pieTerm"></div>
+                    </div>
+                </div>
             </div>
         </div>
 

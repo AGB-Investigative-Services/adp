@@ -1,505 +1,76 @@
-d3.json("resources/data/custom_hire_data.json").then((dashData) => {
-  // console.log(dashData);
+function dashBarCharts(sample) {
 
-  var data = dashData.map(yr => yr['Hire Year']);
+  d3.json("resources/data/custom_hire_data.json").then((dashData) => {
+    // console.log(dashData);
 
-  // finding unique values
-  function onlyUnique(value, index, self) {
-    return self.indexOf(value) === index;
-  }
-
-  var unique = data.filter(onlyUnique);
-  // console.log(unique);
-
-  var sortedunique = unique.sort(function (a, b) {
-    return b - a
-  });
-
-  var hireData = dashData.map(item => item['Hire Reason Description']);
-  var unique_hireData = hireData.filter(onlyUnique);
-  var sorted_hireData = unique_hireData.sort(function (a, b) {
-    return a - b
-  });
-
-  var positionData = dashData.map(item => item['Position Status']);
-  var unique_positionData = positionData.filter(onlyUnique);
-  var sorted_positionData = unique_positionData.sort(function (a, b) {
-    return a - b
-  });
-
-  var regionData = dashData.map(item => item['Business Unit Description']);
-  var unique_regionData = regionData.filter(onlyUnique);
-  var sorted_regionData = unique_regionData.sort(function (a, b) {
-    return a - b
-  });
-
-  var terminationData = dashData.map(item => item['Voluntary/Involuntary Termination Flag']);
-  var unique_terminationData = terminationData.filter(onlyUnique);
-  var sorted_terminationData = unique_terminationData.sort(function (a, b) {
-    return a - b
-  });
-
-  const yearly = sortedunique;
-  const hireReason = sorted_hireData;
-  const positionStatus = sorted_positionData;
-  const region = sorted_regionData;
-  const terminationType = sorted_terminationData;
-  console.log(yearly);
-  console.log(hireReason);
-  console.log(positionStatus);
-  console.log(region);
-  console.log(terminationType);
-
-  state = {
-    userInputContainerClicked: false,
-    searchTerm: "",
-    // tags that render are inside of 'passingTags' object.
-    passingTags: {
-      search: {
-        inputTerm: ""
-      },
-      yearly: {
-        2020: false,
-        2019: false,
-        2018: false,
-        2017: false,
-        2016: false,
-        2015: false,
-        2014: false,
-        2013: false,
-        2012: false,
-        2011: false,
-        2010: false,
-        2009: false,
-        2008: false,
-        2006: false,
-        1999: false
-      },
-      hireReason: {
-        "New Position": false,
-        null: false,
-        "Existing Position": false
-      },
-      positionStatus: {
-        "Active": false,
-        "Terminated": false,
-        "Leave": false,
-        "Deceased": false
-      },
-      region: {
-        "Darryl\'s Region": false,
-        null: false,
-        "Administration": false,
-        "Steve\'s Region": false,
-        "Odom\'s Region": false,
-        "Alicia\'s Region": false,
-        "AGB Foundation": false
-      },
-      terminationType: {
-        null: false,
-        "Involuntary": false,
-        "Voluntary": false
-      }
-    }
-  };
-
-});
-
-import React, { Component } from "react";
-
-class InputTagCollection extends Component {
-  render() {
-    console.log(this.props.tags);
-    const { search, yearly, hireReason, positionStatus, region, terminationType } = this.props.tags;
-    return (
-      <div id="chosen-tags">
-        {search.inputTerm.length ? (
-          <div className="collection" onClick={this.props.cancelSearchTag}>
-            <h6 onClick={this.props.cancelSearchTag}>{search.inputTerm}</h6>
-          </div>
-        ) : null}
-        {/* ************** YEARLY ************** */}
-        {yearly["2020"] ? (
-          <div
-            className="collection 2020"
-            data-name="2020"
-            onClick={e => this.props.allFilterClickListener(e, "yearly")}
-          >
-            <h6 data-name="2020">2020</h6>
-          </div>
-        ) : null}
-        {yearly["2019"] ? (
-          <div
-            className="collection 2019"
-            data-name="2019"
-            onClick={e => this.props.allFilterClickListener(e, "yearly")}
-          >
-            <h6 data-name="2019">2019</h6>
-          </div>
-        ) : null}
-        {yearly["2018"] ? (
-          <div
-            className="collection 2018"
-            data-name="2018"
-            onClick={e => this.props.allFilterClickListener(e, "yearly")}
-          >
-            <h6 data-name="2018">2018</h6>
-          </div>
-        ) : null}
-        {yearly["2017"] ? (
-          <div
-            className="collection 2017"
-            data-name="2017"
-            onClick={e => this.props.allFilterClickListener(e, "yearly")}
-          >
-            <h6 data-name="2017">2017</h6>
-          </div>
-        ) : null}
-        {yearly["2016"] ? (
-          <div
-            className="collection 2016"
-            data-name="2016"
-            onClick={e => this.props.allFilterClickListener(e, "yearly")}
-          >
-            <h6 data-name="2016">2016</h6>
-          </div>
-        ) : null}
-        {yearly["2015"] ? (
-          <div
-            className="collection 2015"
-            data-name="2015"
-            onClick={e => this.props.allFilterClickListener(e, "yearly")}
-          >
-            <h6 data-name="2015">2015</h6>
-          </div>
-        ) : null}
-        {yearly["2014"] ? (
-          <div
-            className="collection 2014"
-            data-name="2014"
-            onClick={e => this.props.allFilterClickListener(e, "yearly")}
-          >
-            <h6 data-name="2014">2014</h6>
-          </div>
-        ) : null}
-        {yearly["2013"] ? (
-          <div
-            className="collection 2013"
-            data-name="2013"
-            onClick={e => this.props.allFilterClickListener(e, "yearly")}
-          >
-            <h6 data-name="2013">2013</h6>
-          </div>
-        ) : null}
-        {yearly["2012"] ? (
-          <div
-            className="collection 2012"
-            data-name="2012"
-            onClick={e => this.props.allFilterClickListener(e, "yearly")}
-          >
-            <h6 data-name="2012">2012</h6>
-          </div>
-        ) : null}
-        {yearly["2011"] ? (
-          <div
-            className="collection 2011"
-            data-name="2011"
-            onClick={e => this.props.allFilterClickListener(e, "yearly")}
-          >
-            <h6 data-name="2011">2011</h6>
-          </div>
-        ) : null}
-        {yearly["2010"] ? (
-          <div
-            className="collection 2010"
-            data-name="2010"
-            onClick={e => this.props.allFilterClickListener(e, "yearly")}
-          >
-            <h6 data-name="2010">2010</h6>
-          </div>
-        ) : null}
-        {yearly["2010"] ? (
-          <div
-            className="collection 2010"
-            data-name="2010"
-            onClick={e => this.props.allFilterClickListener(e, "yearly")}
-          >
-            <h6 data-name="2010">2010</h6>
-          </div>
-        ) : null}
-        {yearly["2009"] ? (
-          <div
-            className="collection 2009"
-            data-name="2009"
-            onClick={e => this.props.allFilterClickListener(e, "yearly")}
-          >
-            <h6 data-name="2009">2009</h6>
-          </div>
-        ) : null}
-        {yearly["2008"] ? (
-          <div
-            className="collection 2008"
-            data-name="2008"
-            onClick={e => this.props.allFilterClickListener(e, "yearly")}
-          >
-            <h6 data-name="2008">2008</h6>
-          </div>
-        ) : null}
-        {yearly["2007"] ? (
-          <div
-            className="collection 2007"
-            data-name="2007"
-            onClick={e => this.props.allFilterClickListener(e, "yearly")}
-          >
-            <h6 data-name="2007">2007</h6>
-          </div>
-        ) : null}
-        {yearly["2006"] ? (
-          <div
-            className="collection 2006"
-            data-name="2006"
-            onClick={e => this.props.allFilterClickListener(e, "yearly")}
-          >
-            <h6 data-name="2006">2006</h6>
-          </div>
-        ) : null}
-        {yearly["1999"] ? (
-          <div
-            className="collection 1999"
-            data-name="1999"
-            onClick={e => this.props.allFilterClickListener(e, "yearly")}
-          >
-            <h6 data-name="1999">1999</h6>
-          </div>
-        ) : null}
-        {/* ************** hireReason ************** */}
-        {hireReason["New Position"] ? (
-          <div
-            className="collection"
-            data-name="New Position"
-            onClick={e => this.props.allFilterClickListener(e, "hireReason")}
-          >
-            <h6 data-name="New Position">New Position</h6>
-          </div>
-        ) : null}
-        {hireReason["Existing Position"] ? (
-          <div
-            className="collection"
-            data-name="Existing Position"
-            onClick={e => this.props.allFilterClickListener(e, "hireReason")}
-          >
-            <h6 data-name="Existing Position">Existing Position</h6>
-          </div>
-        ) : null}
-        {/* ************** positionStatus ************** */}
-        {positionStatus.Active ? (
-          <div
-            className="collection"
-            data-name="Active"
-            onClick={e => this.props.allFilterClickListener(e, "positionStatus")}
-          >
-            <h6 data-name="Active">Active</h6>
-          </div>
-        ) : null}
-        {positionStatus.Terminated ? (
-          <div
-            className="collection"
-            data-name="Terminated"
-            onClick={e => this.props.allFilterClickListener(e, "positionStatus")}
-          >
-            <h6 data-name="Terminated">Terminated</h6>
-          </div>
-        ) : null}
-        {positionStatus.Leave ? (
-          <div
-            className="collection"
-            data-name="Leave"
-            onClick={e => this.props.allFilterClickListener(e, "positionStatus")}
-          >
-            <h6 data-name="Leave">Leave</h6>
-          </div>
-        ) : null}
-        {positionStatus.Deceased ? (
-          <div
-            className="collection"
-            data-name="Deceased"
-            onClick={e => this.props.allFilterClickListener(e, "positionStatus")}
-          >
-            <h6 data-name="Deceased">Deceased</h6>
-          </div>
-        ) : null}
-        {/* ************** region ************** */}
-        {region["Darryl\'s Region"] ? (
-          <div
-            className="collection"
-            data-name="Darryl\'s Region"
-            onClick={e => this.props.allFilterClickListener(e, "region")}
-          >
-            <h6 data-name="Darryl\'s Region">Darryl's Region</h6>
-          </div>
-        ) : null}
-        {region.Administration ? (
-          <div
-            className="collection"
-            data-name="Administration"
-            onClick={e => this.props.allFilterClickListener(e, "region")}
-          >
-            <h6 data-name="Administration">Administration</h6>
-          </div>
-        ) : null}
-        {region["Steve\'s Region"] ? (
-          <div
-            className="collection"
-            data-name="Steve\'s Region"
-            onClick={e => this.props.allFilterClickListener(e, "region")}
-          >
-            <h6 data-name="Steve\'s Region">Steve's Region</h6>
-          </div>
-        ) : null}
-        {region["Odom\'s Region"] ? (
-          <div
-            className="collection"
-            data-name="Odom\'s Region"
-            onClick={e => this.props.allFilterClickListener(e, "region")}
-          >
-            <h6 data-name="Odom\'s Region">Odom's Region</h6>
-          </div>
-        ) : null}
-        {region["Alicia\'s Region"] ? (
-          <div
-            className="collection"
-            data-name="Alicia\'s Region"
-            onClick={e => this.props.allFilterClickListener(e, "region")}
-          >
-            <h6 data-name="Alicia\'s Region">Alicia's Region</h6>
-          </div>
-        ) : null}
-        {region["AGB Foundation"] ? (
-          <div
-            className="collection"
-            data-name="AGB Foundation"
-            onClick={e => this.props.allFilterClickListener(e, "region")}
-          >
-            <h6 data-name="AGB Foundation">AGB Foundation</h6>
-          </div>
-        ) : null}
-        {/* ************** terminationType ************** */}
-        {terminationType.Involuntary ? (
-          <div
-            className="collection"
-            data-name="Involuntary"
-            onClick={e => this.props.allFilterClickListener(e, "terminationType")}
-          >
-            <h6 data-name="Involuntary">Involuntary</h6>
-          </div>
-        ) : null}
-        {terminationType.Voluntary ? (
-          <div
-            className="collection"
-            data-name="Voluntary"
-            onClick={e => this.props.allFilterClickListener(e, "terminationType")}
-          >
-            <h6 data-name="Voluntary">Voluntary</h6>
-          </div>
-        ) : null}
-      </div>
-    );
-  }
-}
-
-export default InputTagCollection;
-
-// **************** UNIVERSAL Filter ****************
-allFilterClickListener = (e, filterProp) => {
-  console.log("FILTER clicked", e.target.dataset.name);
-  const name = e.target.dataset.name;
-  this.setState(prevState => ({
-    passingTags: {
-      ...prevState.passingTags,
-      [filterProp]: {
-        ...prevState.passingTags[filterProp],
-        [name]: !prevState.passingTags[filterProp][name]
-      }
-    }
-  }));
-};
-
-function enrollmentBarCharts(sample) {
-
-  d3.json("resources/data/enrollment_comparsion_data.json").then((enrollData) => {
-    // console.log(enrollData);
-
-    var data = enrollData;
+    var data = dashData.filter(sampleObj => sampleObj['Hire Year'] == sample);
     // console.log(data);
+    var term = data.filter(term => term['Termination Date'] > 0);
+    // console.log(term);
 
-    var kept = data.filter(coverage => coverage['TYPE OF ENROLLMENT CHANGE'] == 'Kept Coverage'); // Used for Bar Charts
-    var added = data.filter(coverage => coverage['TYPE OF ENROLLMENT CHANGE'] == 'Added Coverage'); // Used for Bar Charts
-    // console.log(kept);
-    // console.log(added);
 
     // (https://stackoverflow.com/questions/29364262/how-to-group-by-and-sum-array-of-object)
-    var sumKept = [];
+    var termination = [];
     // (https://www.w3schools.com/jsref/jsref_reduce.asp)
-    kept.reduce(function (kpt, value) {
-      if (!kpt[value['PLAN TYPE']]) {
-        kpt[value['PLAN TYPE']] = { 'PLAN TYPE': value['PLAN TYPE'], '# of Employees': 0 };
-        sumKept.push(kpt[value['PLAN TYPE']])
+    term.reduce(function (trm, value) {
+      if (!trm[value['Business Unit Description']]) {
+        trm[value['Business Unit Description']] = { 'Business Unit Description': value['Business Unit Description'], 'count': 0 };
+        termination.push(trm[value['Business Unit Description']])
       }
-      kpt[value['PLAN TYPE']]['# of Employees'] += value['# of Employees'];
-      return kpt;
+      trm[value['Business Unit Description']]['count'] += value['count'];
+      return trm;
     }, {});
 
-    var sumAdded = [];
-    added.reduce(function (add, value) {
-      if (!add[value['PLAN TYPE']]) {
-        add[value['PLAN TYPE']] = { 'PLAN TYPE': value['PLAN TYPE'], '# of Employees': 0 };
-        sumAdded.push(add[value['PLAN TYPE']])
+    var retention = [];
+    data.reduce(function (ret, value) {
+      if (!ret[value['Business Unit Description']]) {
+        ret[value['Business Unit Description']] = { 'Business Unit Description': value['Business Unit Description'], 'count': 0 };
+        retention.push(ret[value['Business Unit Description']])
       }
-      add[value['PLAN TYPE']]['# of Employees'] += value['# of Employees'];
-      return add;
+      ret[value['Business Unit Description']]['count'] += value['count'];
+      return ret;
     }, {});
 
-    // console.log(sumKept);
-    // console.log(sumAdded);
+    // console.log(termination);
+    // console.log(retention);
 
-    var sortedKept = sumKept.sort(function (a, b) {
-      return b['# of Employees'] - a['# of Employees']
+    var sortedretention = retention.sort(function (a, b) {
+      return b['count'] - a['count']
     });
 
-    // console.log(sortedKept);
-
+    console.log(sortedretention);
 
     var trace1 = {
       type: 'bar',
-      x: sumKept.map(row => row['PLAN TYPE']),
-      y: sumKept.map(row => row['# of Employees']),
-      text: "Kept Coverage",
-      text: sumKept.map(row => row['# of Employees']),
+      x: termination.map(row => row['Business Unit Description']),
+      y: termination.map(row => row['count']),
+      text: "Turnover Rate",
+      text: termination.map(row => row['count']),
       textposition: 'auto',
-      name: 'Kept Coverage',
+      name: 'Turnover Rate',
     };
 
     var trace2 = {
       type: 'bar',
-      x: sumAdded.map(row => row['PLAN TYPE']),
-      y: sumAdded.map(row => row['# of Employees']),
-      text: sumAdded.map(row => row['# of Employees']),
+      x: retention.map(row => row['Business Unit Description']),
+      y: retention.map(row => row['count']),
+      text: retention.map(row => row['count']),
       textposition: 'auto',
-      name: 'Added Coverage',
+      name: 'Retention Rate',
     };
 
     var data = [trace1, trace2];
 
     var layout = {
-      title: 'Employee Benefit Enrollment',
+      title: 'Status of New Hire by Region',
       barmode: 'group',
-      xaxis: { title: 'Plan Name' },
-      yaxis: { title: '# of Employees' },
+      xaxis: { title: 'Business Unit Description' },
+      yaxis: { title: 'Retention Rates and Turnover Rates' },
     };
 
     var config = { responsive: true }
 
-    Plotly.newPlot('enrollment', data, layout, config);
+    Plotly.newPlot('retentionRate', data, layout, config);
 
   });
 
@@ -562,9 +133,9 @@ function turnover(sample) {
       arr = arr.filter(isEligible);
       return arr;
     }
-    
+
     function isEligible(value) {
-      if(value !== false || value !== null || value !== 0 || value !== "") {
+      if (value !== false || value !== null || value !== 0 || value !== "") {
         return value;
       }
     }
@@ -623,10 +194,9 @@ function turnover(sample) {
 function yearlyTurnover(sample) {
 
   d3.json("resources/data/custom_hire_data.json").then((dashData) => {
-    // console.log(dashData);
+    console.log(dashData);
 
     var data = dashData.filter(sampleObj => sampleObj['Hire Year'] == sample);
-    // console.log(data);
 
     var term = data.map(term => term['Termination Date']);
     // console.log(term);
@@ -635,9 +205,9 @@ function yearlyTurnover(sample) {
       arr = arr.filter(isEligible);
       return arr;
     }
-    
+
     function isEligible(value) {
-      if(value !== false || value !== null || value !== 0 || value !== "") {
+      if (value !== false || value !== null || value !== 0 || value !== "") {
         return value;
       }
     }
@@ -676,7 +246,7 @@ function yearlyTurnover(sample) {
         data: {
           indicator: [
             {
-              title: { text: sample},
+              title: { text: sample },
               // mode: "number+delta",
               // delta: { reference: hireTotal, relative: true}
             }
@@ -712,7 +282,7 @@ function retention(sample) {
     // console.log(uniquePeople);
 
     // Filtering "uniquePeople" array for all people who has worded more than one year to find retention people
-    var retentionPeople = uniquePeople.filter(uni => uni['Years of Service'] >= 1 );
+    var retentionPeople = uniquePeople.filter(uni => uni['Years of Service'] >= 1);
     // console.log(retentionPeople);
 
     // Creating total count
@@ -780,7 +350,7 @@ function yearlyRetention(sample) {
     // console.log(uniquePeople);
 
     // Filtering "uniquePeople" array for all people who has worded more than one year to find retention people
-    var retentionPeople = uniquePeople.filter(uni => uni['Years of Service'] >= 1 );
+    var retentionPeople = uniquePeople.filter(uni => uni['Years of Service'] >= 1);
     // console.log(retentionPeople);
 
     // Creating total count
@@ -828,27 +398,330 @@ function yearlyRetention(sample) {
   });
 }
 
-function init() {
-
-  // Grab a reference to the dropdown select element
-  var selector = d3.select("#selDataset");
-
+function dataByRegion(sample) {
   d3.json("resources/data/custom_hire_data.json").then((dashData) => {
     // console.log(dashData);
 
-    var data = dashData.map(yr => yr['Hire Year']);
+    // Create an array of each region
+    var admin = dashData
+      .filter(item => item['Business Unit Description'] == 'Administration')
+      .filter(item => item['Hire Year'] == sample);
 
-    // finding unique values
+    var aliciaRegion = dashData
+      .filter(item => item['Business Unit Description'] == 'Alicia\'s Region')
+      .filter(item => item['Hire Year'] == sample);
+
+    var steveRegion = dashData
+      .filter(item => item['Business Unit Description'] == 'Steve\'s Region')
+      .filter(item => item['Hire Year'] == sample);
+
+    var darrylRegion = dashData
+      .filter(item => item['Business Unit Description'] == 'Darryl\'s Region')
+      .filter(item => item['Hire Year'] == sample);
+
+    var odomRegion = dashData
+      .filter(item => item['Business Unit Description'] == 'Odom\'s Region')
+      .filter(item => item['Hire Year'] == sample);
+
+    var administration = [];
+    admin.reduce(function (adm, value) {
+      if (!adm[value['Position Status']]) {
+        adm[value['Position Status']] = { 'Position Status': value['Position Status'], 'count': 0 };
+        administration.push(adm[value['Position Status']])
+      }
+      adm[value['Position Status']]['count'] += value['count'];
+      return adm;
+    }, {});
+
+    var alicia = [];
+    aliciaRegion.reduce(function (ali, value) {
+      if (!ali[value['Position Status']]) {
+        ali[value['Position Status']] = { 'Position Status': value['Position Status'], 'count': 0 };
+        alicia.push(ali[value['Position Status']])
+      }
+      ali[value['Position Status']]['count'] += value['count'];
+      return ali;
+    }, {});
+
+    var steve = [];
+    steveRegion.reduce(function (stv, value) {
+      if (!stv[value['Position Status']]) {
+        stv[value['Position Status']] = { 'Position Status': value['Position Status'], 'count': 0 };
+        steve.push(stv[value['Position Status']])
+      }
+      stv[value['Position Status']]['count'] += value['count'];
+      return stv;
+    }, {});
+
+    var darryl = [];
+    darrylRegion.reduce(function (dyl, value) {
+      if (!dyl[value['Position Status']]) {
+        dyl[value['Position Status']] = { 'Position Status': value['Position Status'], 'count': 0 };
+        darryl.push(dyl[value['Position Status']])
+      }
+      dyl[value['Position Status']]['count'] += value['count'];
+      return dyl;
+    }, {});
+
+    var odom = [];
+    odomRegion.reduce(function (dm, value) {
+      if (!dm[value['Position Status']]) {
+        dm[value['Position Status']] = { 'Position Status': value['Position Status'], 'count': 0 };
+        odom.push(dm[value['Position Status']])
+      }
+      dm[value['Position Status']]['count'] += value['count'];
+      return dm;
+    }, {});
+
+    console.log(odom);
+
+    // Display the pie chart
+    var data = [{
+      values: administration.map(item => item['count']),
+      labels: administration.map(item => item['Position Status']),
+      type: "pie"
+    }];
+
+    console.log(data);
+
+    var layout = {
+      height: 'auto',
+      width: 'auto'
+    };
+
+    var config = { responsive: true }
+
+    Plotly.newPlot("pie", data, layout, config);
+
+
+    var administrationTerm = [];
+    admin.reduce(function (adm, value) {
+      if (!adm[value['Voluntary/Involuntary Termination Flag']]) {
+        adm[value['Voluntary/Involuntary Termination Flag']] = { 'Voluntary/Involuntary Termination Flag': value['Voluntary/Involuntary Termination Flag'], 'count': 0 };
+        administrationTerm.push(adm[value['Voluntary/Involuntary Termination Flag']])
+      }
+      adm[value['Voluntary/Involuntary Termination Flag']]['count'] += value['count'];
+      return adm;
+    }, {});
+
+    var aliciaTerm = [];
+    aliciaRegion.reduce(function (ali, value) {
+      if (!ali[value['Voluntary/Involuntary Termination Flag']]) {
+        ali[value['Voluntary/Involuntary Termination Flag']] = { 'Voluntary/Involuntary Termination Flag': value['Voluntary/Involuntary Termination Flag'], 'count': 0 };
+        aliciaTerm.push(ali[value['Voluntary/Involuntary Termination Flag']])
+      }
+      ali[value['Voluntary/Involuntary Termination Flag']]['count'] += value['count'];
+      return ali;
+    }, {});
+
+    var steveTerm = [];
+    steveRegion.reduce(function (stv, value) {
+      if (!stv[value['Voluntary/Involuntary Termination Flag']]) {
+        stv[value['Voluntary/Involuntary Termination Flag']] = { 'Voluntary/Involuntary Termination Flag': value['Voluntary/Involuntary Termination Flag'], 'count': 0 };
+        steveTerm.push(stv[value['Voluntary/Involuntary Termination Flag']])
+      }
+      stv[value['Voluntary/Involuntary Termination Flag']]['count'] += value['count'];
+      return stv;
+    }, {});
+
+    var darrylTerm = [];
+    darrylRegion.reduce(function (dyl, value) {
+      if (!dyl[value['Voluntary/Involuntary Termination Flag']]) {
+        dyl[value['Voluntary/Involuntary Termination Flag']] = { 'Voluntary/Involuntary Termination Flag': value['Voluntary/Involuntary Termination Flag'], 'count': 0 };
+        darrylTerm.push(dyl[value['Voluntary/Involuntary Termination Flag']])
+      }
+      dyl[value['Voluntary/Involuntary Termination Flag']]['count'] += value['count'];
+      return dyl;
+    }, {});
+
+    var odomTerm = [];
+    odomRegion.reduce(function (dm, value) {
+      if (!dm[value['Voluntary/Involuntary Termination Flag']]) {
+        dm[value['Voluntary/Involuntary Termination Flag']] = { 'Voluntary/Involuntary Termination Flag': value['Voluntary/Involuntary Termination Flag'], 'count': 0 };
+        odomTerm.push(dm[value['Voluntary/Involuntary Termination Flag']])
+      }
+      dm[value['Voluntary/Involuntary Termination Flag']]['count'] += value['count'];
+      return dm;
+    }, {});
+
+    console.log(odomTerm);
+
+    // Display the pie chart
+    var data = [{
+      values: administrationTerm.map(item => item['count']),
+      labels: administrationTerm.map(item => item['Voluntary/Involuntary Termination Flag']),
+      type: "pie"
+    }];
+
+    console.log(data);
+
+    var layout = {
+      height: 'auto',
+      width: 'auto'
+    };
+
+    var config = { responsive: true }
+
+    Plotly.newPlot("pieTerm", data, layout, config);
+
+  });
+
+}
+
+
+// On change to the DOM, call getData()
+d3.selectAll("#selregion").on("change", getData);
+
+// Function called by DOM changes
+function getData() {
+
+  var dropdownMenu = d3.select("#selregion");
+
+  // Assign the value of the dropdown menu option to a variable
+  var dataset = dropdownMenu.property("value");
+  // Initialize an empty array for the region's data
+  var data = [];
+
+  if (dataset == 'Administration') {
+    // Function called by DOM changes
+
+    d3.json("resources/data/custom_hire_data.json").then((dashData) => {
+      // console.log(dashData);
+
+      var admin = dashData.filter(item => item['Business Unit Description'] == 'Administration');
+      // .filter(item => item['Hire Year'] == sample);
+
+      var administration = [];
+      admin.reduce(function (adm, value) {
+        if (!adm[value['Position Status']]) {
+          adm[value['Position Status']] = { 'Position Status': value['Position Status'], 'count': 0 };
+          administration.push(adm[value['Position Status']])
+        }
+        adm[value['Position Status']]['count'] += value['count'];
+        return adm;
+      }, {});
+
+      data = administration.map(item => item['count']);
+      console.log(data);
+
+    });
+  }
+  else if (dataset == 'Alicia') {
+
+    d3.json("resources/data/custom_hire_data.json").then((dashData) => {
+
+      var aliciaRegion = dashData.filter(item => item['Business Unit Description'] == 'Alicia\'s Region');
+      // .filter(item => item['Hire Year'] == sample);
+
+      var alicia = [];
+      aliciaRegion.reduce(function (ali, value) {
+        if (!ali[value['Position Status']]) {
+          ali[value['Position Status']] = { 'Position Status': value['Position Status'], 'count': 0 };
+          alicia.push(ali[value['Position Status']])
+        }
+        ali[value['Position Status']]['count'] += value['count'];
+        return ali;
+      }, {});
+
+      data = alicia.map(item => item['count']);
+      console.log(data);
+
+    });
+  }
+  else if (dataset == 'Steve') {
+
+    d3.json("resources/data/custom_hire_data.json").then((dashData) => {
+
+      var steveRegion = dashData.filter(item => item['Business Unit Description'] == 'Steve\'s Region');
+      // .filter(item => item['Hire Year'] == sample);
+
+      var steve = [];
+      steveRegion.reduce(function (stv, value) {
+        if (!stv[value['Position Status']]) {
+          stv[value['Position Status']] = { 'Position Status': value['Position Status'], 'count': 0 };
+          steve.push(stv[value['Position Status']])
+        }
+        stv[value['Position Status']]['count'] += value['count'];
+        return stv;
+      }, {});
+
+      data = steve.map(item => item['count']);
+      console.log(data);
+
+    });
+  }
+  else if (dataset == 'Darryl') {
+
+    d3.json("resources/data/custom_hire_data.json").then((dashData) => {
+
+      var darrylRegion = dashData.filter(item => item['Business Unit Description'] == 'Darryl\'s Region');
+      // .filter(item => item['Hire Year'] == sample);
+
+      var darryl = [];
+      darrylRegion.reduce(function (dyl, value) {
+        if (!dyl[value['Position Status']]) {
+          dyl[value['Position Status']] = { 'Position Status': value['Position Status'], 'count': 0 };
+          darryl.push(dyl[value['Position Status']])
+        }
+        dyl[value['Position Status']]['count'] += value['count'];
+        return dyl;
+      }, {});
+
+      data = darryl.map(item => item['count']);
+      console.log(data);
+
+    });
+  }
+  else if (dataset == 'Odom') {
+
+    d3.json("resources/data/custom_hire_data.json").then((dashData) => {
+
+      var odomRegion = dashData.filter(item => item['Business Unit Description'] == 'Odom\'s Region');
+      // .filter(item => item['Hire Year'] == sample);
+
+      var odom = [];
+      odomRegion.reduce(function (dm, value) {
+        if (!dm[value['Position Status']]) {
+          dm[value['Position Status']] = { 'Position Status': value['Position Status'], 'count': 0 };
+          odom.push(dm[value['Position Status']])
+        }
+        dm[value['Position Status']]['count'] += value['count'];
+        return dm;
+      }, {});
+
+      data = odom.map(item => item['count']);
+      console.log(data);
+
+    });
+
+  }
+  // Call function to update the chart
+  updatePlotly(data);
+
+}
+
+// Update the restyled plot's values
+function updatePlotly(newdata) {
+  Plotly.restyle("pie", "values", [newdata]);
+}
+
+function init() {
+
+  d3.json("resources/data/custom_hire_data.json").then((dashData) => {
+
+    // Creating a function to find unique values
     function onlyUnique(value, index, self) {
       return self.indexOf(value) === index;
     }
 
+    var data = dashData.map(yr => yr['Hire Year']);
     var unique = data.filter(onlyUnique);
-    // console.log(unique);
-
     var sortedunique = unique.sort(function (a, b) {
       return b - a
     });
+
+    // Grab a reference to the dropdown select element
+    var selector = d3.select("#selDataset");
 
     sortedunique.forEach((sample) => {
       selector
@@ -859,11 +732,13 @@ function init() {
 
     // Use the first sample from the list to build the initial plots
     var firstSample = sortedunique[0];
-    // console.log(firstSample);
+
     turnover(firstSample);
     yearlyTurnover(firstSample);
     retention(firstSample);
     yearlyRetention(firstSample);
+    dashBarCharts(firstSample);
+    dataByRegion(firstSample);
 
   });
 
@@ -876,7 +751,9 @@ function optionChanged(newSample) {
   yearlyTurnover(newSample);
   retention(newSample);
   yearlyRetention(newSample);
-  
+  dashBarCharts(newSample);
+  dataByRegion(newSample);
+
 }
 
 // Initialize the dashboard

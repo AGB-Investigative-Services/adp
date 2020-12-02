@@ -52,29 +52,10 @@
         </div>
 
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-2">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        Employee Coverage Status
-                    </div>
-                </div>
-                <div id="keptCount"></div>
-            </div>
-            <div class="col-md-8">
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        Employee Benefit Enrollment
-                    </div>
-                </div>
-                <div id="enrollment"></div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-4">
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        Eligibility Group
+                        Year
                     </div>
                 </div>
                 <div class="well">
@@ -85,19 +66,59 @@
         </div>
 
         <div class="row">
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        Total 30-90-180 Day New Hire Review
+                    </div>
+                </div>
+                <div id="pie"></div>
+            </div>
+            <div class="col-md-8">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        Overall Turnover Rate
+                    </div>
+                </div>
+                <div id="30-90-180"></div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="well">
+                    <h2>Panel By Region</h2>
+                    <select id="selregion" onchange="getData(this.value)">
+                        <option value="Administration">Administration</option>
+                        <option value="Alicia">Alicia's Region</option>
+                        <option value="Darryl">Darryl's Region</option>
+                        <option value="Odom">Odom's Region</option>
+                        <option value="Steve">Steve's Region</option>
+                    </select>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div id="pie"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="pieTerm"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        Employee Benefit Enrollment
+                        Add Title Here
                     </div>
                 </div>
                 <table id="summary-table" class="table table-striped table-inverse">
                     <thead>
                         <tr>
-                            <th>Year</th>
-                            <th>Type Of Enrollment Change</th>
-                            <th>Plan Type</th>
-                            <th>Plan Name</th>
+                            <th>Name</th>
+                            <th>Name</th>
                             <th>Name</th>
                         </tr>
                     </thead>
@@ -112,7 +133,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.js"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="https://d3js.org/d3.v5.min.js"></script>
-    <script src="resources/js/enrollment.js"></script>
+    <script src="resources/js/30_90_180.js"></script>
 
 </body>
 

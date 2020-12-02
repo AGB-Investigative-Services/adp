@@ -46,35 +46,16 @@
                 <a href="index.html">Credentials</a>
                 <a href="index.html">Discrepanies</a>
                 <a href="index.html">Annual Reviews</a>
-                <a href="30_90_180.html">30-90-180</a>
+                <a href="index.html">30-90-180</a>
                 <a href="dash.html">Annual Dash</a>
             </div>
         </div>
 
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-2">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        Employee Coverage Status
-                    </div>
-                </div>
-                <div id="keptCount"></div>
-            </div>
-            <div class="col-md-8">
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        Employee Benefit Enrollment
-                    </div>
-                </div>
-                <div id="enrollment"></div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-4">
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        Eligibility Group
+                        Year
                     </div>
                 </div>
                 <div class="well">
@@ -82,7 +63,67 @@
                     <select id="selDataset" onchange="optionChanged(this.value)"></select>
                 </div>
             </div>
+
+            <div class="col-md-2">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        Hire Reason
+                    </div>
+                </div>
+                <div class="well">
+                    <!-- <h5>Plan Names</h5> -->
+                    <select id="hireDataset" onchange="optionChanged(this.value)"></select>
+                </div>
+            </div>
         </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        Overall Turnover Rate
+                    </div>
+                </div>
+                <div id="turnover"></div>
+            </div>
+            <div class="col-md-3">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        Yearly Turnover Rate
+                    </div>
+                </div>
+                <div id="yearlyTurnover"></div>
+            </div>
+            <div class="col-md-3">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        Overall Retention Rate
+                    </div>
+                </div>
+                <div id="retention"></div>
+            </div>
+            <div class="col-md-3">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        Yearly Retention Rate
+                    </div>
+                </div>
+                <div id="yearlyRetention"></div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        Overall Turnover Rate
+                    </div>
+                </div>
+                <div id="retentionRate"></div>
+            </div>
+        </div>
+
+
 
         <div class="row">
             <div class="col-md-12">
@@ -112,7 +153,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.js"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="https://d3js.org/d3.v5.min.js"></script>
-    <script src="resources/js/enrollment.js"></script>
+    <script src="resources/js/dash.js"></script>
 
 </body>
 
