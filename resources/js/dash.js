@@ -76,6 +76,16 @@ function dashBarCharts(sample) {
 
 }
 
+var data = [
+  {
+    x: ['giraffes', 'orangutans', 'monkeys'],
+    y: [20, 14, 23],
+    type: 'bar'
+  }
+];
+
+Plotly.newPlot('myDiv', data);
+
 function enrollmentTable(sample) {
 
   d3.json("resources/data/enrollment_comparsion_data.json").then((enrollData) => {
